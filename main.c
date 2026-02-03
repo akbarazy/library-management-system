@@ -1,21 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <stdbool.h>
-#include <ctype.h>
-#include <windows.h>
 
-#define MAX_BARANG 255
-#define FILE_CSV "dataset.csv"
+#define DATASET "dataset.csv"
 
 typedef struct
 {
     int id;
-    char nama[255];
-    int stok;
-    float harga;
-} Barang;
+    char *title;
+    char *author;
+    int publicationYear;
+    bool available;
+} Book;
+
+typedef struct Node
+{
+    Book *data;
+    struct Node *next;
+} Node;
 
 typedef enum
 {
@@ -366,7 +369,7 @@ int main()
 
 int memuatDariFile()
 {
-    FILE *pointerFile = fopen(FILE_CSV, "r");
+    FILE *pointerFile = fopen(DATASET, "r");
 
     if (!pointerFile)
         return -1;
@@ -386,7 +389,7 @@ int memuatDariFile()
 
 int menyimpanKeFile()
 {
-    FILE *pointerFile = fopen(FILE_CSV, "w");
+    FILE *pointerFile = fopen(DATASET, "w");
 
     if (!pointerFile)
         return -1;
