@@ -16,37 +16,24 @@ typedef struct
 
 typedef struct Node
 {
-    Book *data;
+    Book data;
     struct Node *next;
 } Node;
 
 typedef enum
 {
-    MENU_UTAMA = 1,
-    MENU_TAMPILKAN,
-    MENU_HAPUS
+    TAMBAH = 1,
+    TAMPILKAN,
+    UBAH,
+    HAPUS,
+    CARI,
+    URUTKAN,
+    KELUAR
 } Menu;
-
-Barang semuaBarang[MAX_BARANG];
-int arah = 2,
-    kolom = 1,
-    jumlahBaris,
-    indexPertama = 0,
-    indexTerakhir = 0,
-    jumlahSemuaBarang = 0;
-bool muatUlang = false;
-char statusTabel[2][255] = {
-    "Paginasi Ke 1.", 
-    "Dari Id Terkecil."
-};
 
 int memuatDariFile();
 int menyimpanKeFile();
-
-void tampilanJudul();
-void tampilanTabel();
 void tampilanMenu(int menuSaatIni);
-
 void tambahBarang();
 void ubahPaginasi();
 void cariBarang();
@@ -55,12 +42,10 @@ void ubahBarang();
 void hapusSemua();
 void hapusBeberapa();
 void hapusBarang();
-
 int linearSearchId(int kunciJawaban);
 int linearSearchNama(char kunciJawaban[255], int indexJawaban[255]);
 int partition(int indexPertama, int indexTerakhir, int kolom, int arah);
 void quickSort(int indexPertama, int indexTerakhir, int kolom, int arah);
-
 void hapusBaris(int jumlahBaris);
 void deskripsiUrutan(int kolom, int arah);
 int kondisiUrutan(Barang barang, Barang pivot, int kolom, int arah);
@@ -69,300 +54,11 @@ void hapusSpasi(char *stringAsli);
 
 int main()
 {
-    Menu menuSaatIni1 = MENU_UTAMA;
-    int statusFile = memuatDariFile();
-    char input[255],
-        namaPengguna[255],
-        kataSandi[255],
-        pesanProgram[255] = "Pesan Program Disini.",
-        menuSaatIni2[255] = "Menu Utama>";
-    bool menuBerganti = false;
-
-    system("cls");
-    tampilanJudul();
-
-    printf("=====================================\n");
-    printf("|     P E M B E R I T A H U A N     |\n");
-    printf("=====================================\n");
-    printf("| + Console Wajib Full Selayar.     |\n");
-    printf("| + Console Jangan Terlalu Ngezoom. |\n");
-    printf("-------------------------------------\n\n");
-
-    do
-    {
-        printf("--- %s ---\n", pesanProgram);
-        strcpy(pesanProgram, "Pesan Program Disini.");
-
-        while (1)
-        {
-            printf("Nama Pengguna : ");
-            fgets(namaPengguna, 255, stdin);
-
-            namaPengguna[strcspn(namaPengguna, "\n")] = '\0';
-
-            hapusSpasi(namaPengguna);
-
-            if (strlen(namaPengguna) == 0)
-            {
-                system("cls");
-                return 0;
-            }
-
-            hapusBaris(1);
-
-            if (strlen(namaPengguna) > 0 && strlen(namaPengguna) <= 50)
-            {
-                printf("Nama Pengguna : %s\n", namaPengguna);
-                break;
-            }
-        }
-
-        while (1)
-        {
-            printf("Kata Sandi : ");
-            fgets(kataSandi, 255, stdin);
-
-            kataSandi[strcspn(kataSandi, "\n")] = '\0';
-
-            hapusSpasi(kataSandi);
-
-            if (strlen(kataSandi) == 0)
-            {
-                system("cls");
-                return 0;
-            }
-
-            hapusBaris(1);
-
-            if (strlen(kataSandi) > 0 && strlen(kataSandi) <= 50)
-            {
-                printf("Nama Pengguna : %s\n", kataSandi);
-                break;
-            }
-        }
-
-        if (strcmp(namaPengguna, "Admin") != 0 || strcmp(kataSandi, "Admin123") != 0)
-            strcpy(pesanProgram, "Gagal Untuk Login.");
-
-        if (strcmp(namaPengguna, "Admin") == 0 && strcmp(kataSandi, "Admin123") == 0)
-            strcpy(pesanProgram, "Berhasil Untuk Login.");
-        
-        hapusBaris(3);
-
-    } while (strcmp(pesanProgram, "Gagal Untuk Login.") == 0);
-
-    strcpy(pesanProgram, statusFile == 0 ? "Berhasil Memuat File." : "Gagal Memuat File.");
-
-    if (jumlahSemuaBarang > 10)
-        indexTerakhir = 9;
-
-    do
-    {
-        hapusBaris(50);
-
-        if (jumlahSemuaBarang <= 10)
-            indexTerakhir = jumlahSemuaBarang - 1;
-        tampilanTabel();
-
-        menuBerganti = false;
-
-        tampilanMenu(menuSaatIni1);
-
-        printf("--- %s ---\n", pesanProgram);
-        strcpy(pesanProgram, "Pesan Program Disini.");
-
-        if (muatUlang)
-            printf("%s Pilih Menu : %d\n", menuSaatIni2, atoi(input));
-        
-        if (!muatUlang)
-        {
-            printf("%s Pilih Menu : ", menuSaatIni2);
-            fgets(input, 255, stdin);
-            input[strcspn(input, "\n")] = '\0';
-
-            if (strlen(input) == 0)
-            {
-                strcpy(pesanProgram, "Input Tidak Boleh Kosong.");
-
-                strcpy(input, "-1");
-
-                continue;
-            }
-
-            int angka = true;
-            for (int i = 0; i < strlen(input); i++)
-            {
-                if (!isdigit(input[i]) && input[i] != '-')
-                {
-                    angka = false;
-                    break;
-                }
-            }
-
-            if (!angka)
-            {
-                strcpy(pesanProgram, "Input Harus Berupa Angka.");
-
-                strcpy(input, "-1");
-
-                continue;
-            }
-        }
-
-        if (menuSaatIni1 == MENU_UTAMA && !menuBerganti)
-        {
-            switch (atoi(input))
-            {
-            case 1:
-                if (jumlahSemuaBarang == 255)
-                    strcpy(pesanProgram, "Daftar Barang Penuh.");
-
-                if (jumlahSemuaBarang < 255)
-                    tambahBarang();
-                break;
-            case 2:
-                if (jumlahSemuaBarang == 0)
-                    strcpy(pesanProgram, "Daftar Barang Kosong.");
-
-                if (jumlahSemuaBarang > 0)
-                    menuSaatIni1 = MENU_TAMPILKAN;
-                    strcpy(menuSaatIni2, "Menu Utama> Tampilkan Barang>");
-
-                    menuBerganti = true;
-                break;
-            case 3:
-                if (jumlahSemuaBarang == 0)
-                    strcpy(pesanProgram, "Daftar Barang Kosong.");
-
-                if (jumlahSemuaBarang > 0)
-                    ubahBarang();
-                break;
-            case 4:
-                if (jumlahSemuaBarang == 0)
-                    strcpy(pesanProgram, "Daftar Barang Kosong.");
-
-                if (jumlahSemuaBarang > 0)
-                {
-                    menuSaatIni1 = 3;
-                    strcpy(menuSaatIni2, "Menu Utama> Hapus Barang>");
-                    menuBerganti = true;
-                }
-                break;
-            case 0:
-                menyimpanKeFile();
-                break;
-            default:
-                strcpy(pesanProgram, "Opsi Tidak Tersedia.");
-                break;
-            }
-        }
-
-        if (menuSaatIni1 == MENU_TAMPILKAN && !menuBerganti)
-        {
-            switch (atoi(input))
-            {
-            case 1:
-                if (jumlahSemuaBarang <= 10)
-                    strcpy(pesanProgram, "Daftar Barang Kurang.");
-
-                if (jumlahSemuaBarang > 10)
-                    ubahPaginasi();
-                break;
-            case 2:
-                if (jumlahSemuaBarang == 0)
-                    strcpy(pesanProgram, "Daftar Barang Kosong.");
-
-                if (jumlahSemuaBarang > 0)
-                    cariBarang();
-                break;
-            case 3:
-                if (jumlahSemuaBarang < 2)
-                {
-                    strcpy(pesanProgram, "Daftar Barang Kurang.");
-                } else if (jumlahSemuaBarang > 1) {
-                    urutkanBarang();
-                }
-                break;
-            case 0:
-                menuSaatIni1 = MENU_UTAMA;
-                strcpy(menuSaatIni2, "Menu Utama>");
-                menuBerganti = true;
-                break;
-            default:
-                strcpy(pesanProgram, "Opsi Tidak Tersedia.");
-                break;
-            }
-        }
-
-        if (menuSaatIni1 == MENU_HAPUS && !menuBerganti)
-        {
-            switch (atoi(input))
-            {
-            case 1:
-                if (jumlahSemuaBarang <= 10)
-                {
-                    strcpy(pesanProgram, "Daftar Barang Kurang.");
-                } else if (jumlahSemuaBarang > 10) {
-                    hapusSemua();
-                }
-                break;
-            case 2:
-                if (jumlahSemuaBarang < 2)
-                {
-                    strcpy(pesanProgram, "Daftar Barang Kurang.");
-                } else if (jumlahSemuaBarang > 1) {
-                    hapusBeberapa();
-                }
-                break;
-            case 3:
-                hapusBarang();
-                break;
-            case 0:
-                menuSaatIni1 = MENU_UTAMA;
-                strcpy(menuSaatIni2, "Menu Utama>");
-                menuBerganti = true;
-                break;
-            default:
-                strcpy(pesanProgram, "Opsi Tidak Tersedia.");
-                break;
-            }
-
-            if (jumlahSemuaBarang == 0)
-            {
-                indexPertama = 0;
-                indexTerakhir = 0;
-
-                muatUlang = false;
-
-                menuSaatIni1 = 1;
-                strcpy(menuSaatIni2, "Menu Utama>");
-                menuBerganti = true;
-
-                strcpy(statusTabel[0], "Paginasi Ke 1.");
-                strcpy(statusTabel[1], "Dari Id Terkecil.");
-                kolom = 1;
-                arah = 2;
-            }
-
-            if (jumlahSemuaBarang > 0)
-            {
-                if (indexPertama >= jumlahSemuaBarang && indexPertama > 0)
-                {
-                    int paginasiTerkanan = (jumlahSemuaBarang + 9) / 10;
-                    snprintf(statusTabel[0], 255, "Paginasi Ke %d.", paginasiTerkanan);
-
-                    indexPertama = paginasiTerkanan * 10 - 10;
-                    indexTerakhir = (jumlahSemuaBarang - indexPertama < 10) ? jumlahSemuaBarang - indexPertama - 1 : 9;
-                    indexTerakhir += indexPertama;
-                }
-
-                if (jumlahSemuaBarang - 1 >= indexPertama && jumlahSemuaBarang - 1 <= indexTerakhir)
-                    indexTerakhir = jumlahSemuaBarang - 1;
-            }
-        }
-    } while (atoi(input) != 0 || menuBerganti);
-
-    system("cls");
+    Node *firstNode = malloc(sizeof(*Node));
+    Menu currentMenu;
+    int fileStatus = memuatDariFile();
+    char input, *notification;
+    bool isMenuChanged = false;
 
     return 0;
 }
