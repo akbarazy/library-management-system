@@ -6,11 +6,9 @@
 #include <ctype.h>
 #include <windows.h>
 
-// konstanta variabel
 #define MAX_BARANG 255
-#define FILE_CSV "inventaris.csv"
+#define FILE_CSV "dataset.csv"
 
-// struct + enum
 typedef struct
 {
     int id;
@@ -26,7 +24,6 @@ typedef enum
     MENU_HAPUS
 } Menu;
 
-// variabel global
 Barang semuaBarang[MAX_BARANG];
 int arah = 2,
     kolom = 1,
@@ -40,16 +37,13 @@ char statusTabel[2][255] = {
     "Dari Id Terkecil."
 };
 
-// file handling
 int memuatDariFile();
 int menyimpanKeFile();
 
-// view program
 void tampilanJudul();
 void tampilanTabel();
 void tampilanMenu(int menuSaatIni);
 
-// crud program
 void tambahBarang();
 void ubahPaginasi();
 void cariBarang();
@@ -59,13 +53,11 @@ void hapusSemua();
 void hapusBeberapa();
 void hapusBarang();
 
-// data algoritma
 int linearSearchId(int kunciJawaban);
 int linearSearchNama(char kunciJawaban[255], int indexJawaban[255]);
 int partition(int indexPertama, int indexTerakhir, int kolom, int arah);
 void quickSort(int indexPertama, int indexTerakhir, int kolom, int arah);
 
-// utils program
 void hapusBaris(int jumlahBaris);
 void deskripsiUrutan(int kolom, int arah);
 int kondisiUrutan(Barang barang, Barang pivot, int kolom, int arah);
@@ -74,7 +66,6 @@ void hapusSpasi(char *stringAsli);
 
 int main()
 {
-    // deklarasi variabel
     Menu menuSaatIni1 = MENU_UTAMA;
     int statusFile = memuatDariFile();
     char input[255],
@@ -99,112 +90,84 @@ int main()
         printf("--- %s ---\n", pesanProgram);
         strcpy(pesanProgram, "Pesan Program Disini.");
 
-        // nama pengguna
         while (1)
         {
-            // input pengguna
             printf("Nama Pengguna : ");
             fgets(namaPengguna, 255, stdin);
 
-            // hapus newline dari input
             namaPengguna[strcspn(namaPengguna, "\n")] = '\0';
 
-            // hapus whitespace dari string input
             hapusSpasi(namaPengguna);
 
-            // jika pengguna hanya mengetik enter
             if (strlen(namaPengguna) == 0)
             {
-                // maka program akan langsung keluar
                 system("cls");
                 return 0;
             }
 
-            // hapus baris tampilan input pengguna
             hapusBaris(1);
 
-            // jika total karakter input pengguna diluar batas 1 sampai 50
             if (strlen(namaPengguna) > 0 && strlen(namaPengguna) <= 50)
             {
-                // cetak ulang supaya tampilan rapi dan lanjut ke kata sandi
                 printf("Nama Pengguna : %s\n", namaPengguna);
                 break;
             }
         }
 
-        // kata sandi
         while (1)
         {
-            // input pengguna
             printf("Kata Sandi : ");
             fgets(kataSandi, 255, stdin);
 
-            // hapus newline dari input
             kataSandi[strcspn(kataSandi, "\n")] = '\0';
 
-            // hapus whitespace dari string input
             hapusSpasi(kataSandi);
 
-            // jika pengguna hanya mengetik enter
             if (strlen(kataSandi) == 0)
             {
-                // maka program akan langsung keluar
                 system("cls");
                 return 0;
             }
 
-            // hapus baris tampilan input pengguna
             hapusBaris(1);
 
-            // jika total karakter input pengguna diluar batas 1 sampai 50
             if (strlen(kataSandi) > 0 && strlen(kataSandi) <= 50)
             {
-                // cetak ulang supaya tampilan rapi dan lanjut ke pengecekan
                 printf("Nama Pengguna : %s\n", kataSandi);
                 break;
             }
         }
 
-        // kalo nama pengguna dan kata sandi ga sesuai maka simpan pesan gagal
         if (strcmp(namaPengguna, "Admin") != 0 || strcmp(kataSandi, "Admin123") != 0)
             strcpy(pesanProgram, "Gagal Untuk Login.");
 
-        // kalo nama pengguna dan kata sandi ga sesuai maka simpan pesan berhasil
         if (strcmp(namaPengguna, "Admin") == 0 && strcmp(kataSandi, "Admin123") == 0)
             strcpy(pesanProgram, "Berhasil Untuk Login.");
         
-        // hapus untuk muat ulang tampilan input
         hapusBaris(3);
 
-    // cek apakah pesan berhasil atau gagal
     } while (strcmp(pesanProgram, "Gagal Untuk Login.") == 0);
 
     strcpy(pesanProgram, statusFile == 0 ? "Berhasil Memuat File." : "Gagal Memuat File.");
 
-    // kalo jumlah data lebih dari 10, maka paginasi otomatis dari 1
     if (jumlahSemuaBarang > 10)
         indexTerakhir = 9;
 
     do
     {
-        // muat ulang tampilan
         hapusBaris(50);
 
-        // kalo jumlah data 0 sampai 10 selalu ubah index akhir
         if (jumlahSemuaBarang <= 10)
             indexTerakhir = jumlahSemuaBarang - 1;
         tampilanTabel();
 
-        // set ulang menu berganti ke false
         menuBerganti = false;
 
-        // tampilkan menu sesuai menu saat ini
         tampilanMenu(menuSaatIni1);
 
         printf("--- %s ---\n", pesanProgram);
         strcpy(pesanProgram, "Pesan Program Disini.");
 
-        // jika muat ulang true maka tidak perlu input pengguna
         if (muatUlang)
             printf("%s Pilih Menu : %d\n", menuSaatIni2, atoi(input));
         
@@ -214,19 +177,15 @@ int main()
             fgets(input, 255, stdin);
             input[strcspn(input, "\n")] = '\0';
 
-            // simpan pesan kesalahan jika hanya menekan enter
             if (strlen(input) == 0)
             {
                 strcpy(pesanProgram, "Input Tidak Boleh Kosong.");
 
-                // ganti nilai input menjadi -1 sebagai tanda kesalahan
                 strcpy(input, "-1");
 
-                // kembali ke muat ulang tampilan atau awal do while
                 continue;
             }
 
-            // mencari apakah ada karakter selain angka di input pengguna
             int angka = true;
             for (int i = 0; i < strlen(input); i++)
             {
@@ -237,91 +196,83 @@ int main()
                 }
             }
 
-            // jika ada karakter selain angka
             if (!angka)
             {
                 strcpy(pesanProgram, "Input Harus Berupa Angka.");
 
-                // ganti nilai input menjadi -1 sebagai tanda kesalahan
                 strcpy(input, "-1");
 
-                // kembali ke muat ulang tampilan atau awal do while
                 continue;
             }
         }
 
-        // jika menu saat ini adalah menu utama dan tidak sedang ganti menu
         if (menuSaatIni1 == MENU_UTAMA && !menuBerganti)
         {
             switch (atoi(input))
             {
-            case 1: // menambah barang hanya bisa jika barang tidak penuh
+            case 1:
                 if (jumlahSemuaBarang == 255)
                     strcpy(pesanProgram, "Daftar Barang Penuh.");
 
                 if (jumlahSemuaBarang < 255)
                     tambahBarang();
                 break;
-            case 2: // submenu tampilan hanya bisa diakses jika daftar barang tidak 0
+            case 2:
                 if (jumlahSemuaBarang == 0)
                     strcpy(pesanProgram, "Daftar Barang Kosong.");
 
                 if (jumlahSemuaBarang > 0)
-                    // ganti menu menjadi submenu tampilkan
                     menuSaatIni1 = MENU_TAMPILKAN;
                     strcpy(menuSaatIni2, "Menu Utama> Tampilkan Barang>");
 
-                    // menandakan bahwa program sedang berganti menu
                     menuBerganti = true;
                 break;
-            case 3: // ubah barang hanya bisa diakses jika daftar barang tidak 0
+            case 3:
                 if (jumlahSemuaBarang == 0)
                     strcpy(pesanProgram, "Daftar Barang Kosong.");
 
                 if (jumlahSemuaBarang > 0)
                     ubahBarang();
                 break;
-            case 4: // submenu hapus hanya bisa diakses jika daftar barang tidak 0
+            case 4:
                 if (jumlahSemuaBarang == 0)
                     strcpy(pesanProgram, "Daftar Barang Kosong.");
 
                 if (jumlahSemuaBarang > 0)
                 {
-                    // ganti menu menjadi submenu hapus
                     menuSaatIni1 = 3;
                     strcpy(menuSaatIni2, "Menu Utama> Hapus Barang>");
                     menuBerganti = true;
                 }
                 break;
-            case 0: // simpan data ke file dan tutup program
+            case 0:
                 menyimpanKeFile();
                 break;
-            default: // berikan pesan kesalahan jika opsi diluar kondisi
+            default:
                 strcpy(pesanProgram, "Opsi Tidak Tersedia.");
                 break;
             }
         }
 
-        // jika menu saat ini adalah submenu tampilkan dan tidak sedang ganti menu
         if (menuSaatIni1 == MENU_TAMPILKAN && !menuBerganti)
         {
             switch (atoi(input))
             {
-            case 1: // ubah paginasi hanya untuk jika daftar barang lebih dari 10
+            case 1:
                 if (jumlahSemuaBarang <= 10)
                     strcpy(pesanProgram, "Daftar Barang Kurang.");
 
                 if (jumlahSemuaBarang > 10)
                     ubahPaginasi();
                 break;
-            case 2: // cari barang dapat berjalan jika daftar barang tidak 0
+            case 2:
                 if (jumlahSemuaBarang == 0)
                     strcpy(pesanProgram, "Daftar Barang Kosong.");
 
                 if (jumlahSemuaBarang > 0)
                     cariBarang();
                 break;
-            case 3: // urutkan barang dapat berjalan jika daftar barang lebih dari 1
+            case 3:
                 if (jumlahSemuaBarang < 2)
                 {
                     strcpy(pesanProgram, "Daftar Barang Kurang.");
@@ -329,23 +280,22 @@ int main()
                     urutkanBarang();
                 }
                 break;
-            case 0: // kembali ke menu utama
+            case 0:
                 menuSaatIni1 = MENU_UTAMA;
                 strcpy(menuSaatIni2, "Menu Utama>");
                 menuBerganti = true;
                 break;
-            default: // berikan pesan kesalahan jika opsi diluar kondisi
+            default:
                 strcpy(pesanProgram, "Opsi Tidak Tersedia.");
                 break;
             }
         }
 
-        // jika menu saat ini adalah submenu hapus dan tidak sedang ganti menu
         if (menuSaatIni1 == MENU_HAPUS && !menuBerganti)
         {
             switch (atoi(input))
             {
-            case 1: // hapus semua berfungsi jika daftar barang lebih dari 10
+            case 1:
                 if (jumlahSemuaBarang <= 10)
                 {
                     strcpy(pesanProgram, "Daftar Barang Kurang.");
@@ -353,7 +303,7 @@ int main()
                     hapusSemua();
                 }
                 break;
-            case 2: // hapus beberapa berfungsi jika daftar barang minimal 2
+            case 2:
                 if (jumlahSemuaBarang < 2)
                 {
                     strcpy(pesanProgram, "Daftar Barang Kurang.");
@@ -364,57 +314,46 @@ int main()
             case 3:
                 hapusBarang();
                 break;
-            case 0: // kembali ke menu utama
+            case 0:
                 menuSaatIni1 = MENU_UTAMA;
                 strcpy(menuSaatIni2, "Menu Utama>");
                 menuBerganti = true;
                 break;
-            default: // berikan pesan kesalahan jika opsi diluar kondisi
+            default:
                 strcpy(pesanProgram, "Opsi Tidak Tersedia.");
                 break;
             }
 
-            // jika daftar barang atau data nya 0
             if (jumlahSemuaBarang == 0)
             {
-                // reset supaya paginasi menjadi 1
                 indexPertama = 0;
                 indexTerakhir = 0;
 
-                // tampilan tidak perlu di muat ulang
                 muatUlang = false;
 
-                // kembali ke menu utama
                 menuSaatIni1 = 1;
                 strcpy(menuSaatIni2, "Menu Utama>");
                 menuBerganti = true;
 
-                // reset status tabel dan urutan seperti awal
                 strcpy(statusTabel[0], "Paginasi Ke 1.");
                 strcpy(statusTabel[1], "Dari Id Terkecil.");
                 kolom = 1;
                 arah = 2;
             }
 
-            // jika daftar barang atau data nya tidak 0
             if (jumlahSemuaBarang > 0)
             {
-                // jika menghapus barang sampai menghapus semua data dalam 1 paginasi
                 if (indexPertama >= jumlahSemuaBarang && indexPertama > 0)
                 {
-                    // menentukan paginasi terakhir dan ubah status tabel
                     int paginasiTerkanan = (jumlahSemuaBarang + 9) / 10;
                     snprintf(statusTabel[0], 255, "Paginasi Ke %d.", paginasiTerkanan);
 
-                    // set indeks awal dan indeks akhir dari paginasi terakhir
                     indexPertama = paginasiTerkanan * 10 - 10;
                     indexTerakhir = (jumlahSemuaBarang - indexPertama < 10) ? jumlahSemuaBarang - indexPertama - 1 : 9;
                     indexTerakhir += indexPertama;
                 }
 
-                // jika menghapus barang tidak sampai menghapus semua data dalam 1 paginasi
                 if (jumlahSemuaBarang - 1 >= indexPertama && jumlahSemuaBarang - 1 <= indexTerakhir)
-                    // set indek akhir menyesuaikan paginasi saat ini
                     indexTerakhir = jumlahSemuaBarang - 1;
             }
         }
@@ -425,24 +364,19 @@ int main()
     return 0;
 }
 
-// file handling
 int memuatDariFile()
 {
     FILE *pointerFile = fopen(FILE_CSV, "r");
 
-    // kembalikan nilai -1 jika gagal memuat file
     if (!pointerFile)
         return -1;
 
-    // membaca dan mengecek setiap isi file perbaris
-    // lalu simpan jika 1 baris yang dicek valid atau bernilai 4
     while (fscanf(pointerFile, "%d,%49[^,],%d,%f",
                   &semuaBarang[jumlahSemuaBarang].id,
                   semuaBarang[jumlahSemuaBarang].nama,
                   &semuaBarang[jumlahSemuaBarang].stok,
                   &semuaBarang[jumlahSemuaBarang].harga) == 4)
     {
-        // jika baris valid maka daftar barang bertambah
         jumlahSemuaBarang++;
     }
     fclose(pointerFile);
@@ -454,14 +388,11 @@ int menyimpanKeFile()
 {
     FILE *pointerFile = fopen(FILE_CSV, "w");
 
-    // kembalikan nilai -1 jika gagal menyimpan data
     if (!pointerFile)
         return -1;
 
-    // simpan data dalam urutan dari id terkecil
     quickSort(0, jumlahSemuaBarang - 1, 1, 2);
 
-    // menulis setiap data menjadi baris di file
     for (int i = 0; i < jumlahSemuaBarang; i++)
         fprintf(pointerFile, "%d,%s,%d,%.2f\n",
                 semuaBarang[i].id,
@@ -473,7 +404,6 @@ int menyimpanKeFile()
     return 0;
 }
 
-// view program
 void tampilanJudul()
 {
     printf(" /$$$$$$ /$$   /$$ /$$    /$$ /$$$$$$$$ /$$   /$$ /$$$$$$$$ /$$$$$$  /$$$$$$$  /$$$$$$  /$$$$$$\n");
@@ -508,7 +438,6 @@ void tampilanTabel()
     printf("| Id   | Nama Barang                                        | Stok | Harga           |\n");
     printf("--------------------------------------------------------------------------------------\n");
 
-    // tampilkan isi data barang jika data lebih dari 0
     if (jumlahSemuaBarang > 0)
     {
         for (int i = indexPertama; i < indexTerakhir + 1; i++)
@@ -529,7 +458,7 @@ void tampilanMenu(int menuSaatIni)
 {
     switch (menuSaatIni)
     {
-    case 1: // tampilan untuk menu utama
+    case 1:
         printf("========================\n");
         printf("|      MENU UTAMA      |\n");
         printf("========================\n");
@@ -540,7 +469,7 @@ void tampilanMenu(int menuSaatIni)
         printf("| 0. Simpan & Keluar   |\n");
         printf("------------------------\n\n");
         break;
-    case 2: // tampilan untuk submenu tampilkan
+    case 2:
         printf("========================   ==============================\n");
         printf("|      MENU UTAMA      |   |      TAMPILKAN BARANG      |\n");
         printf("========================   ==============================\n");
@@ -551,7 +480,7 @@ void tampilanMenu(int menuSaatIni)
         printf("| 0. Simpan & Keluar   |   ------------------------------\n");
         printf("------------------------\n\n");
         break;
-    case 3: // tampilan untuk submenu hapus
+    case 3:
         printf("========================   ==============================\n");
         printf("|      MENU UTAMA      |   |        HAPUS BARANG        |\n");
         printf("========================   ==============================\n");
@@ -565,7 +494,6 @@ void tampilanMenu(int menuSaatIni)
     }
 }
 
-// crud program
 void tambahBarang()
 {
     char input[255];
@@ -573,7 +501,7 @@ void tambahBarang()
 
     printf("=== TAMBAH BARANG ===\n");
     printf("Id    : B%03d\n", jumlahSemuaBarang + 1);
-    barangBaru.id = jumlahSemuaBarang + 1; // id barang otomatis bertambah 1
+    barangBaru.id = jumlahSemuaBarang + 1;
 
     while (1)
     {
@@ -583,7 +511,6 @@ void tambahBarang()
         input[strcspn(input, "\n")] = '\0';
         hapusSpasi(input);
 
-        // jika input pengguna hanya "/" maka langsung keluar dari fitur
         if (strcmp(input, "/") == 0)
         {
             muatUlang = false;
@@ -593,7 +520,6 @@ void tambahBarang()
 
         hapusBaris(1);
 
-        // validasi nama bahwa jumlah karakter harus 1 sampai 50
         if (strlen(input) > 0 && strlen(input) <= 50)
         {
             strcpy(barangBaru.nama, input);
@@ -609,7 +535,6 @@ void tambahBarang()
 
         input[strcspn(input, "\n")] = '\0';
 
-        // jika input pengguna hanya "/" maka langsung keluar dari fitur
         if (strcmp(input, "/") == 0)
         {
             muatUlang = false;
@@ -617,14 +542,12 @@ void tambahBarang()
             return;
         }
 
-        // jika input pengguna hanya enter maka input diulang
         if (strlen(input) == 0)
         {
             hapusBaris(1);
             continue;
         }
 
-        // cek apakah input pengguna hanya berisi angka
         bool angka = true;
         for (int i = 0; i < strlen(input); i++)
         {
@@ -635,18 +558,14 @@ void tambahBarang()
             }
         }
 
-        // jika input pengguna bukan angka
         if (!angka)
         {
-            // maka harus mengulang input
             hapusBaris(1);
             continue;
         }
 
-        // jika input diluar batas
         if (atoi(input) > 9999)
         {
-            // maka harus mengulang input
             hapusBaris(1);
             continue;
         }
@@ -664,7 +583,6 @@ void tambahBarang()
 
         input[strcspn(input, "\n")] = '\0';
 
-        // jika input pengguna hanya "/" maka langsung keluar dari fitur
         if (strcmp(input, "/") == 0)
         {
             muatUlang = false;
@@ -672,14 +590,12 @@ void tambahBarang()
             return;
         }
 
-        // jika input pengguna hanya enter maka input diulang
         if (strlen(input) == 0)
         {
             hapusBaris(1);
             continue;
         }
 
-        // cek apakah input pengguna hanya berisi angka
         bool angka = true;
         for (int i = 0; i < strlen(input); i++)
         {
@@ -690,15 +606,12 @@ void tambahBarang()
             }
         }
 
-        // jika input pengguna bukan angka
         if (!angka)
         {
-            // maka mengulang input
             hapusBaris(1);
             continue;
         }
 
-        // jika input diluar batas maka mengulang input
         if (atof(input) < 100 || atof(input) > 999999999999)
         {
             hapusBaris(1);
@@ -711,15 +624,12 @@ void tambahBarang()
         break;
     }
 
-    // jumlah data kurang dari 10 maka indeks terakhir bertambah 1
     if (indexTerakhir - indexPertama + 1 < 10)
         indexTerakhir++;
 
-    // tambah barang ke array semua barang
     semuaBarang[jumlahSemuaBarang] = barangBaru;
     jumlahSemuaBarang++;
 
-    // urutkan lagi data sesuai urutan yang dipilih
     quickSort(0, jumlahSemuaBarang - 1, kolom, arah);
 
     muatUlang = true;
@@ -1435,7 +1345,6 @@ void hapusBarang()
     muatUlang = true;
 }
 
-// data algoritma
 int linearSearchId(int kunciJawaban) {
     for (int i = 0; i < jumlahSemuaBarang; i++) {
         if (semuaBarang[i].id == kunciJawaban) {
@@ -1501,7 +1410,6 @@ void quickSort(int indexPertama, int indexTerakhir, int kolom, int arah)
     }
 }
 
-// utils program
 void hapusBaris(int jumlahBaris)
 {
     for (int i = 0; i < jumlahBaris; i++)
