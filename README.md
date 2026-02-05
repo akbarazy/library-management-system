@@ -1,6 +1,5 @@
 # Library Management System (C)
-A command-line based **Library Management System** written in **C**, designed to demonstrate fundamental concepts of **Data Structures and Algorithms**.  
-This project focuses on efficient data management using linked lists, along with classic searching and sorting algorithms.
+A command-line based **Library Management System** written in **C**, designed to demonstrate fundamental concepts of **Data Structures and Algorithms**. This project focuses on efficient data management using linked lists, along with classic searching and sorting algorithms.
 
 ---
 
@@ -35,8 +34,10 @@ This project focuses on efficient data management using linked lists, along with
 ---
 
 ## Project Structure
+```
 Library-Management-System/
-├── main.c # Main program and menu handling
-├── library.c # Core library functions
-├── library.h # Function declarations and structs
-├── README.md # Project documentation
+├── main.c
+├── library.c
+├── library.h
+└── README.md
+```
