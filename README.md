@@ -5,10 +5,11 @@ A command-line based **Library Management System** written in **C**, designed to
 
 ## Features
 - Add new book records
+- Display all available books
+- Update existing books
 - Delete existing books
 - Search books by ID or title
 - Sort books based on specific attributes
-- Display all available books
 - Simple and interactive CLI menu
 
 ---
@@ -18,9 +19,8 @@ A command-line based **Library Management System** written in **C**, designed to
   - Dynamic storage of book records
 - **Searching Algorithms**
   - Linear Search
-  - Binary Search (for sorted data)
 - **Sorting Algorithms**
-  - Bubble Sort / Selection Sort / Merge Sort (depending on implementation)
+  - Merge Sort
 - **Pointers & Memory Management**
   - Dynamic memory allocation using `malloc` and `free`
 
@@ -39,5 +39,6 @@ Library-Management-System/
 ├── main.c
 ├── library.c
 ├── library.h
+├── dataset.csv
 └── README.md
 ```
