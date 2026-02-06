@@ -1,27 +1,49 @@
 #include "file_handler.h"
+#include "book.h"
+#include "utils.h"
 #include <stdio.h>
 
-int loadData()
+int loadData(Node **firstNode)
 {
     FILE *pointerFile = fopen(DATASET, "r");
+    Book book;
+    Node *node;
 
     if (!pointerFile)
         return -1;
 
-    // while (fscanf(pointerFile, "%d,%49[^,],%d,%f",
-    //               &semuaBarang[jumlahSemuaBarang].id,
-    //               semuaBarang[jumlahSemuaBarang].nama,
-    //               &semuaBarang[jumlahSemuaBarang].stok,
-    //               &semuaBarang[jumlahSemuaBarang].harga) == 4)
-    // {
-    //     jumlahSemuaBarang++;
-    // }
+    while (fscanf(
+        pointerFile, 
+        "%d,%[^,],%[^,],%d,%d\n",
+        &book.id,
+        book.title,
+        book.author,
+        &book.publicationYear,
+        &book.available
+    ) == 5)
+    {
+        node = createNode(
+            book.id, 
+            book.title, 
+            book.author, 
+            book.publicationYear, 
+            book.available
+        );
+
+        if (!node)
+        {
+            fclose(pointerFile);
+            return -1;
+        }
+
+        *firstNode = insertNode(*firstNode, node);
+    }
     fclose(pointerFile);
 
     return 0;
 }
 
-int saveData()
+int saveData(Node **firstNode)
 {
     FILE *pointerFile = fopen(DATASET, "w");
 
