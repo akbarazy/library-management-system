@@ -24,11 +24,13 @@ void tampilanTabel();
 
 int main()
 {
-    Node *firstNode = malloc(sizeof(*Node));
+    Node *firstNode = NULL;
     Menu currentMenu;
-    int fileStatus = memuatDariFile();
+    int fileStatus = loadData(&firstNode);
     char input, *notification;
     bool isMenuChanged = false;
+
+    if (fileStatus)
 
     return 0;
 }
