@@ -1,7 +1,7 @@
-#include "file_handler.h"
+#include <stdio.h>
 #include "book.h"
 #include "utils.h"
-#include <stdio.h>
+#include "file_handler.h"
 
 int loadData(Node **firstNode)
 {
@@ -22,6 +22,7 @@ int loadData(Node **firstNode)
         &book.available
     ) == 5)
     {
+        printf("ok");
         node = createNode(
             book.id, 
             book.title, 

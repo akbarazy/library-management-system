@@ -16,6 +16,7 @@ typedef struct Node
 {
     Book book;
     struct Node *next;
+    struct Node *prev;
 } Node;
 
 void tambahBuku();
