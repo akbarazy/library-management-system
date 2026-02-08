@@ -4,14 +4,8 @@
 #include <stdio.h>
 #include "book.h"
 
-Node *createNode(
-    int id, 
-    const char *title, 
-    const char *author, 
-    int publicationYear, 
-    bool available
-);
-Node *insertNode(Node *firstNode, Node *node);
+Node *createNode();
+void insertNode(Node **firstNode, Node *node);
 
 // void hapusBaris(int jumlahBaris);
 // void deskripsiUrutan(int kolom, int arah);

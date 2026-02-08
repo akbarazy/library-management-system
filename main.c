@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include "file_handler.h"
 #include "book.h"
-// #include "algorithm.h"
+#include "algorithm.h"
 #include "utils.h"
 
 typedef enum
@@ -23,12 +23,14 @@ void menuDisplay(Menu currentMenu);
 
 int main()
 {
-    Node *firstNode = NULL;
+    Node *firstNode;
     Menu currentMenu;
     Menu selectedMenu = TAMBAH;
     int fileStatus = loadData(&firstNode);
     char input, *notification;
     bool isMenuChanged = false;
+
+    printf("ok");
 
     // if (firstNode->book.title)
     // {
