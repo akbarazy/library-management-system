@@ -6,8 +6,8 @@
 typedef struct
 {
     int id;
-    char *title;
-    char *author;
+    char title[256];
+    char author[256];
     int publicationYear;
     bool available;
 } Book;

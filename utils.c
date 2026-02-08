@@ -4,34 +4,10 @@
 #include "book.h"
 #include "utils.h"
 
-Node *createNode(
-    int id, 
-    const char *title, 
-    const char *author, 
-    int publicationYear, 
-    bool available
-)
+Node *createNode()
 {
     Node *node = (Node*) malloc(sizeof(Node));
     if (!node) return NULL;
-
-    node->book.id = id;
-    node->book.publicationYear = publicationYear;
-    node->book.available = available;
-
-    node->book.title = (char*) malloc(strlen(title) + 1);
-    node->book.author = (char*) malloc(strlen(author) + 1);
-
-    if (!node->book.title || !node->book.author) 
-    {
-        free(node->book.title);
-        free(node->book.author);
-        free(node);
-        return NULL;
-    }
-
-    strcpy(node->book.title, title);
-    strcpy(node->book.author, author);
 
     node->next = NULL;
     node->prev = NULL;
@@ -39,24 +15,21 @@ Node *createNode(
     return node;
 }
 
-Node *insertNode(Node *firstNode, Node *node)
+void insertNode(Node **firstNode, Node *node)
 {
     Node *currentNode;
 
-    if (!firstNode)
-    {
-        firstNode = node;
-        return firstNode;
+    if (!*firstNode) {
+        *firstNode = node;
+        return;
     }
-    
-    currentNode = firstNode;
-    while (currentNode->next)
-        currentNode = currentNode->next;
-    
-    node->prev = currentNode;
-    currentNode->next = node;
 
-    return firstNode;
+    currentNode = *firstNode;
+    while (currentNode->next) 
+        currentNode = currentNode->next;
+
+    currentNode->next = node;
+    node->prev = currentNode;
 }
 
 // void hapusBaris(int jumlahBaris)

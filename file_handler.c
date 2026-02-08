@@ -5,16 +5,16 @@
 
 int loadData(Node **firstNode)
 {
-    FILE *pointerFile = fopen(DATASET, "r");
+    FILE *file = fopen(DATASET, "r");
     Book book;
     Node *node;
 
-    if (!pointerFile)
+    if (!file)
         return -1;
 
     while (fscanf(
-        pointerFile, 
-        "%d,%[^,],%[^,],%d,%d\n",
+        file, 
+        "%d,%255[^,],%255[^,],%d,%d",
         &book.id,
         book.title,
         book.author,
@@ -22,24 +22,17 @@ int loadData(Node **firstNode)
         &book.available
     ) == 5)
     {
-        printf("ok");
-        node = createNode(
-            book.id, 
-            book.title, 
-            book.author, 
-            book.publicationYear, 
-            book.available
-        );
-
+        node = createNode();
         if (!node)
         {
-            fclose(pointerFile);
+            fclose(file);
             return -1;
         }
 
-        *firstNode = insertNode(*firstNode, node);
+        node->book = book;
+        insertNode(firstNode, node);
     }
-    fclose(pointerFile);
+    fclose(file);
 
     return 0;
 }
