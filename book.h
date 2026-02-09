@@ -19,10 +19,11 @@ typedef struct Node
     struct Node *prev;
 } Node;
 
-void tambahBuku();
-void tampilkanBuku();
-void ubahBuku();
-void hapusBuku();
-void cariBuku();
+void addBooks();
+void showBooks();
+void updateBooks();
+void deleteBooks();
+void searchBooks();
+void sortBooks();
 
 #endif

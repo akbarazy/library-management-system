@@ -10,39 +10,22 @@
 
 typedef enum
 {
-    TAMBAH = 1,
-    TAMPILKAN,
-    UBAH,
-    HAPUS,
-    CARI,
-    URUTKAN,
-    KELUAR
+    ADD = 1,
+    SHOW,
+    UPDATE,
+    DELETE,
+    SEARCH,
+    SORT,
+    QUIT
 } Menu;
 
-void menuDisplay();
-
-int main()
-{
-    Node *firstNode = NULL;
-    Menu currentMenu, selectedMenu = TAMBAH;
-    int fileStatus = loadData(&firstNode);
-    char input, notification[256];
-    bool isMenuChanged = false;
-
-    printf("\n");
-    menuDisplay();
-    input = getch();
-
-    return 0;
-}
-
-void menuDisplay()
+void menuDisplay(const char *notification)
 {
     printf("===========================\n");
     printf(" LIBRARY MANAGEMENT SYSTEM \n");
     printf("===========================\n\n");
 
-    printf("Total Books: 100\n\n");
+    printf("Total Of Books: 100\n\n");
     printf("1. Add Books\n");
     printf("2. Show Books\n");
     printf("3. Update Books\n");
@@ -51,6 +34,62 @@ void menuDisplay()
     printf("6. Sort Books\n");
     printf("7. Save & Quit\n\n");
 
+    printf("Notification:\n%s\n\n", notification);
     printf("==============\n");
     printf("Select Menu: ");
+}
+
+int main()
+{
+    Node *firstNode = NULL;
+    Menu selectedMenu = ADD;
+    int fileStatus = loadData(&firstNode);
+    char input, notification[256];
+    bool isMenuChanged = false;
+
+    strcpy(
+        notification, 
+        !fileStatus ? "Data Loaded Successfully" : "Data Load Failed"
+    );
+
+    while (selectedMenu != QUIT)
+    {
+        system("cls");
+        printf("\n");
+
+        menuDisplay(notification);
+        input = getch();
+
+        switch (input - '0')
+        {
+        case ADD:
+            addBooks(&firstNode);
+            break;
+        // case SHOW:
+        //     showBooks(firstNode);
+        //     break;
+        // case UPDATE:
+        //     updateBook(&firstNode);
+        //     break;
+        // case DELETE:
+        //     deleteBook(&firstNode);
+        //     break;
+        // case SEARCH:
+        //     searchBook(firstNode);
+        //     break;
+        // case SORT:
+        //     sortBooks(&firstNode);
+        //     break;
+        case QUIT:
+            selectedMenu = QUIT;
+            // saveData(&firstNode);
+            printf("\n");
+            break;
+        default:
+            strcpy(notification, "Invalid Menu Selection");
+            break;
+        }
+    }
+
+    return 0;
 }
