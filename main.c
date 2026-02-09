@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <conio.h>
 #include "file_handler.h"
 #include "book.h"
 #include "algorithm.h"
@@ -18,41 +19,38 @@ typedef enum
     KELUAR
 } Menu;
 
-void headerDisplay();
-void menuDisplay(Menu currentMenu);
+void menuDisplay();
 
 int main()
 {
-    Node *firstNode;
-    Menu currentMenu;
-    Menu selectedMenu = TAMBAH;
+    Node *firstNode = NULL;
+    Menu currentMenu, selectedMenu = TAMBAH;
     int fileStatus = loadData(&firstNode);
-    char input, *notification;
+    char input, notification[256];
     bool isMenuChanged = false;
 
-    printf("ok");
-
-    // if (firstNode->book.title)
-    // {
-    //     printf("lah kok ilang");
-    // }
-
-    // printf("%s", firstNode->book.title);
+    printf("\n");
+    menuDisplay();
+    input = getch();
 
     return 0;
 }
 
-void headerDisplay() {}
-
-void menuDisplay(Menu currentMenu)
+void menuDisplay()
 {
-    switch (currentMenu)
-    {
-    case 1:
-        break;
-    case 2:
-        break;
-    case 3:
-        break;
-    }
+    printf("===========================\n");
+    printf(" LIBRARY MANAGEMENT SYSTEM \n");
+    printf("===========================\n\n");
+
+    printf("Total Books: 100\n\n");
+    printf("1. Add Books\n");
+    printf("2. Show Books\n");
+    printf("3. Update Books\n");
+    printf("4. Delete Books\n");
+    printf("5. Search Books\n");
+    printf("6. Sort Books\n");
+    printf("7. Save & Quit\n\n");
+
+    printf("==============\n");
+    printf("Select Menu: ");
 }
