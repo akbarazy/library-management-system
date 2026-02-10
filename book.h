@@ -19,11 +19,18 @@ typedef struct Node
     struct Node *prev;
 } Node;
 
-void addBooks();
-void showBooks();
-void updateBooks();
-void deleteBooks();
-void searchBooks();
-void sortBooks();
+typedef struct
+{
+    bool completed;
+    char notification[256];
+} Output;
+
+
+Output addBooks(Node **firstNode);
+Output showBooks(Node *firstNode);
+Output updateBooks(Node **firstNode);
+Output deleteBooks(Node **firstNode);
+Output searchBooks(Node *firstNode);
+Output sortBooks(Node **firstNode);
 
 #endif
