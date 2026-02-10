@@ -8,9 +8,9 @@
 #include "algorithm.h"
 #include "utils.h"
 
-typedef enum
-{
-    ADD = 1,
+typedef enum {
+    DEFAULT,
+    ADD,
     SHOW,
     UPDATE,
     DELETE,
@@ -19,8 +19,7 @@ typedef enum
     QUIT
 } Menu;
 
-void menuDisplay(const char *notification)
-{
+void menuDisplay() {
     printf("===========================\n");
     printf(" LIBRARY MANAGEMENT SYSTEM \n");
     printf("===========================\n\n");
@@ -33,61 +32,82 @@ void menuDisplay(const char *notification)
     printf("5. Search Books\n");
     printf("6. Sort Books\n");
     printf("7. Save & Quit\n\n");
-
-    printf("Notification:\n%s\n\n", notification);
-    printf("==============\n");
-    printf("Select Menu: ");
 }
 
-int main()
-{
+int main() {
+    Output output = NULL;
     Node *firstNode = NULL;
-    Menu selectedMenu = ADD;
-    int fileStatus = loadData(&firstNode);
-    char input, notification[256];
-    bool isMenuChanged = false;
+    Menu selectedMenu = DEFAULT;
+    char notification[256];
+    int input;
 
-    strcpy(
-        notification, 
-        !fileStatus ? "Data Loaded Successfully" : "Data Load Failed"
-    );
+    if (!loadData(&firstNode)) {
+        strcpy(
+            notification, 
+            "Data Loaded Successfully"
+        );
+    } else {
+        strcpy(
+            notification, 
+            "Data Load Failed"
+        );
+    }
 
-    while (selectedMenu != QUIT)
-    {
+    while (selectedMenu != QUIT) {
         system("cls");
+
         printf("\n");
+        menuDisplay();
 
-        menuDisplay(notification);
-        input = getch();
+        if (strlen(notification) > 0) {
+            printf("Notification:\n%s\n\n", notification);
+            memset(notification, 0, sizeof(notification));
+        }
 
-        switch (input - '0')
-        {
-        case ADD:
-            addBooks(&firstNode);
-            break;
-        // case SHOW:
-        //     showBooks(firstNode);
-        //     break;
-        // case UPDATE:
-        //     updateBook(&firstNode);
-        //     break;
-        // case DELETE:
-        //     deleteBook(&firstNode);
-        //     break;
-        // case SEARCH:
-        //     searchBook(firstNode);
-        //     break;
-        // case SORT:
-        //     sortBooks(&firstNode);
-        //     break;
-        case QUIT:
-            selectedMenu = QUIT;
-            // saveData(&firstNode);
-            printf("\n");
-            break;
-        default:
-            strcpy(notification, "Invalid Menu Selection");
-            break;
+        if (selectedMenu == DEFAULT) {
+            printf("==============\n");
+            printf("Select Menu: ");
+
+            input = getch();
+            if (!verifyInputInt(input, 1, 7)) continue;
+
+            deleteLines(2);
+        }
+
+        switch (input) {
+            case ADD:
+                if (selectedMenu == ADD) {
+                    output = addBooks(&firstNode);
+
+                    strcpy(notification, output.notification);
+                    if (output.completed) selectedMenu = DEFAULT;
+                } else {
+                    selectedMenu = ADD;
+                }
+                break;
+            // case SHOW:
+            //     showBooks(firstNode);
+            //     break;
+            // case UPDATE:
+            //     updateBook(&firstNode);
+            //     break;
+            // case DELETE:
+            //     deleteBook(&firstNode);
+            //     break;
+            // case SEARCH:
+            //     searchBook(firstNode);
+            //     break;
+            // case SORT:
+            //     sortBooks(&firstNode);
+            //     break;
+            case QUIT:
+                // saveData(&firstNode);
+                selectedMenu = QUIT;
+                printf("\n");
+                break;
+            default:
+                strcpy(notification, "Invalid Menu Selection");
+                break;
         }
     }
 
