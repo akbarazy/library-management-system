@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "book.h"
 #include "utils.h"
 
@@ -32,11 +33,40 @@ void insertNode(Node **firstNode, Node *node)
     node->prev = currentNode;
 }
 
-// void hapusBaris(int jumlahBaris)
-// {
-//     for (int i = 0; i < jumlahBaris; i++)
-//         printf("\033[A\033[2K");
-// }
+bool verifyInputInt(int input, int min, int max)
+{
+    if (input < min || input > max)
+        return false;
+    return true;
+}
+
+bool verifyInputStr(const char *input) {
+    int length = 0;
+
+    if (!input) return false;
+
+    while (*input) {
+        if (length >= 255) return false;
+
+        if (!((*input >= '0' && *input <= '9') ||
+              (*input >= 'a' && *input <= 'z') ||
+              (*input >= 'A' && *input <= 'Z')))
+            return false;
+
+        length++;
+        input++;
+    }
+
+    if (!length) return false;
+
+    return true;
+}
+
+void deleteLines(int lineCount)
+{
+    for (int i = 0; i < lineCount; i++)
+        printf("\033[A\033[2K");
+}
 
 // void deskripsiUrutan(int kolom, int arah)
 // {

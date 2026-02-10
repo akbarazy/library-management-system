@@ -1,10 +1,10 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include "book.h"
 #include "utils.h"
 #include "file_handler.h"
 
-int loadData(Node **firstNode)
-{
+bool loadData(Node **firstNode) {
     FILE *file = fopen(DATASET, "r");
     Book book;
     Node *node;
@@ -37,8 +37,7 @@ int loadData(Node **firstNode)
     return 0;
 }
 
-int saveData(Node **firstNode)
-{
+bool saveData(Node **firstNode) {
     FILE *file = fopen(DATASET, "w");
 
     if (!file)
