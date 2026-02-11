@@ -10,6 +10,7 @@ void insertNode(Node **firstNode, Node *node);
 bool verifyInputInt(int input, int min, int max);
 bool verifyInputStr(const char *input);
 void deleteLines(int lineCount);
+int countBooks(Node *firstNode);
 
 // void deskripsiUrutan(int kolom, int arah);
 // int kondisiUrutan(Barang barang, Barang pivot, int kolom, int arah);

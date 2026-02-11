@@ -19,12 +19,12 @@ typedef enum {
     QUIT
 } Menu;
 
-void menuDisplay() {
+void menuDisplay(int bookCount) {
     printf("===========================\n");
     printf(" LIBRARY MANAGEMENT SYSTEM \n");
     printf("===========================\n\n");
 
-    printf("Total Of Books: 100\n\n");
+    printf("Total Of Books: %d\n\n", bookCount);
     printf("1. Add Books\n");
     printf("2. Show Books\n");
     printf("3. Update Books\n");
@@ -35,13 +35,12 @@ void menuDisplay() {
 }
 
 int main() {
-    Output output = NULL;
+    Output output;
     Node *firstNode = NULL;
     Menu selectedMenu = DEFAULT;
-    char notification[256];
-    int input;
+    char input, notification[256];
 
-    if (!loadData(&firstNode)) {
+    if (loadData(&firstNode)) {
         strcpy(
             notification, 
             "Data Loaded Successfully"
@@ -57,7 +56,7 @@ int main() {
         system("cls");
 
         printf("\n");
-        menuDisplay();
+        menuDisplay(countBooks(firstNode));
 
         if (strlen(notification) > 0) {
             printf("Notification:\n%s\n\n", notification);
@@ -69,12 +68,10 @@ int main() {
             printf("Select Menu: ");
 
             input = getch();
-            if (!verifyInputInt(input, 1, 7)) continue;
-
             deleteLines(2);
         }
 
-        switch (input) {
+        switch (input - '0') {
             case ADD:
                 if (selectedMenu == ADD) {
                     output = addBooks(&firstNode);
@@ -85,6 +82,7 @@ int main() {
                     selectedMenu = ADD;
                 }
                 break;
+
             // case SHOW:
             //     showBooks(firstNode);
             //     break;
@@ -105,6 +103,7 @@ int main() {
                 selectedMenu = QUIT;
                 printf("\n");
                 break;
+
             default:
                 strcpy(notification, "Invalid Menu Selection");
                 break;
