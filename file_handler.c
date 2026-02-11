@@ -10,7 +10,7 @@ bool loadData(Node **firstNode) {
     Node *node;
 
     if (!file)
-        return -1;
+        return false;
 
     while (fscanf(
         file, 
@@ -26,7 +26,7 @@ bool loadData(Node **firstNode) {
         if (!node)
         {
             fclose(file);
-            return -1;
+            return false;
         }
 
         node->book = book;
@@ -34,14 +34,14 @@ bool loadData(Node **firstNode) {
     }
     fclose(file);
 
-    return 0;
+    return true;
 }
 
 bool saveData(Node **firstNode) {
     FILE *file = fopen(DATASET, "w");
 
     if (!file)
-        return -1;
+        return false;
 
     // quickSort(0, jumlahSemuaBarang - 1, 1, 2);
 
@@ -53,5 +53,5 @@ bool saveData(Node **firstNode) {
         //         semuaBarang[i].harga);
     fclose(file);
 
-    return 0;
+    return true;
 }
