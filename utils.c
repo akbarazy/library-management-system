@@ -33,7 +33,7 @@ void insertNode(Node **firstNode, Node *node)
     node->prev = currentNode;
 }
 
-bool verifyInputInt(int input, int min, int max)
+bool verifyInputInt(char input, int min, int max)
 {
     if (input < min || input > max)
         return false;
@@ -68,6 +68,28 @@ void deleteLines(int lineCount)
         printf("\033[A\033[2K");
 }
 
+void deleteWhiteSpace(char *input) {
+    int firstChar = -1, lastChar = -1, index = -1;
+
+    while (input[++index] != '\0') {
+        if (input[index] != ' ' && input[index] != '\t') {
+            if (firstChar != -1) {
+                lastChar = index;
+            } else {
+                firstChar = index;
+                lastChar = index;
+            }
+        }
+    }
+
+    if (firstChar == -1 && lastChar == -1) {
+        input[0] = '\0';
+    } else {
+        memmove(input, input + firstChar, lastChar - firstChar + 1);
+        input[lastChar - firstChar + 1] = '\0';
+    }
+}
+
 int countBooks(Node *firstNode)
 {
     int count = 0;
@@ -79,6 +101,13 @@ int countBooks(Node *firstNode)
     }
 
     return count;
+}
+
+int numberStrToInt(const char *input) {
+    char *endPointer;
+    int number = strtol(input, &endPointer, 10);
+
+    if (*endPointer == '\0') return number;
 }
 
 // void deskripsiUrutan(int kolom, int arah)
