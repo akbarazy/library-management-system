@@ -68,6 +68,19 @@ void deleteLines(int lineCount)
         printf("\033[A\033[2K");
 }
 
+int countBooks(Node *firstNode)
+{
+    int count = 0;
+    Node *currentNode = firstNode;
+
+    while (currentNode) {
+        count++;
+        currentNode = currentNode->next;
+    }
+
+    return count;
+}
+
 // void deskripsiUrutan(int kolom, int arah)
 // {
 //     switch (kolom)
