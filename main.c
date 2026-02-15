@@ -41,15 +41,9 @@ int main() {
     char input, notification[256];
 
     if (loadData(&firstNode)) {
-        strcpy(
-            notification, 
-            "Data Loaded Successfully"
-        );
+        snprintf(notification, sizeof(notification), "Data Loaded Successfully");
     } else {
-        strcpy(
-            notification, 
-            "Data Load Failed"
-        );
+        snprintf(notification, sizeof(notification), "Data Load Failed");
     }
 
     while (selectedMenu != QUIT) {
@@ -58,7 +52,7 @@ int main() {
         printf("\n");
         menuDisplay(countBooks(firstNode));
 
-        if (strlen(notification) > 0) {
+        if (notification[0] != '\0') {
             printf("Notification:\n%s\n\n", notification);
             memset(notification, 0, sizeof(notification));
         }
@@ -76,7 +70,7 @@ int main() {
                 if (selectedMenu == ADD) {
                     output = addBooks(&firstNode);
 
-                    strcpy(notification, output.notification);
+                    snprintf(notification, sizeof(notification), "%s", output.notification);
                     if (output.completed) selectedMenu = DEFAULT;
                 } else {
                     selectedMenu = ADD;
@@ -105,7 +99,7 @@ int main() {
                 break;
 
             default:
-                strcpy(notification, "Invalid Menu Selection");
+                snprintf(notification, sizeof(notification), "Invalid Menu Selection");
                 break;
         }
     }
