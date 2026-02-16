@@ -7,11 +7,13 @@
 
 Node *createNode();
 void insertNode(Node **firstNode, Node *node);
-bool verifyInputInt(int input, int min, int max);
-bool verifyInputStr(const char *input);
+bool verifyInputInt(char *input, int min, int max);
+bool verifyInputStr(char *input);
 void deleteLines(int lineCount);
-void deleteWhiteSpace(char *input);
-int countBooks(Node *firstNode);
+void trimWhiteSpace(char *input);
+int bookCount(Node *firstNode);
+bool isNumberStr(const char *input);
+int numberStrToInt(const char *input);
 
 // void deskripsiUrutan(int kolom, int arah);
 // int kondisiUrutan(Barang barang, Barang pivot, int kolom, int arah);

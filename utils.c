@@ -33,33 +33,35 @@ void insertNode(Node **firstNode, Node *node)
     node->prev = currentNode;
 }
 
-bool verifyInputInt(char input, int min, int max)
+bool verifyInputInt(char *input, int min, int max)
 {
-    if (input < min || input > max)
+    int number;
+
+    if (!input || input[0] == '\0') return false;
+    trimWhiteSpace(input);
+
+    if (!isNumberStr(input)) return false;
+    number = numberStrToInt(input);
+    
+    if (number < min || number > max)
         return false;
     return true;
 }
 
-bool verifyInputStr(const char *input) {
-    int length = 0;
+bool verifyInputStr(char *input) {
+    int index = 0;
 
-    if (!input) return false;
+    if (!input || input[0] == '\0') return false;
+    trimWhiteSpace(input);
 
-    while (*input) {
-        if (length >= 255) return false;
-
-        if (!((*input >= '0' && *input <= '9') ||
-              (*input >= 'a' && *input <= 'z') ||
-              (*input >= 'A' && *input <= 'Z')))
+    while (input[index] != '\0') {
+        if ((unsigned char)input[index] < 32 || 
+            (unsigned char)input[index] > 126)
             return false;
-
-        length++;
-        input++;
+        index++;
     }
 
-    if (!length) return false;
-
-    return true;
+    return index > 0;
 }
 
 void deleteLines(int lineCount)
@@ -68,10 +70,10 @@ void deleteLines(int lineCount)
         printf("\033[A\033[2K");
 }
 
-void deleteWhiteSpace(char *input) {
-    int firstChar = -1, lastChar = -1, index = -1;
+void trimWhiteSpace(char *input) {
+    int firstChar = -1, lastChar = -1, index = 0;
 
-    while (input[++index] != '\0') {
+    while (input[index] != '\0') {
         if (input[index] != ' ' && input[index] != '\t') {
             if (firstChar != -1) {
                 lastChar = index;
@@ -80,6 +82,7 @@ void deleteWhiteSpace(char *input) {
                 lastChar = index;
             }
         }
+        index++;
     }
 
     if (firstChar == -1 && lastChar == -1) {
@@ -90,7 +93,7 @@ void deleteWhiteSpace(char *input) {
     }
 }
 
-int countBooks(Node *firstNode)
+int bookCount(Node *firstNode)
 {
     int count = 0;
     Node *currentNode = firstNode;
@@ -103,11 +106,24 @@ int countBooks(Node *firstNode)
     return count;
 }
 
-int numberStrToInt(const char *input) {
-    char *endPointer;
-    int number = strtol(input, &endPointer, 10);
+bool isNumberStr(const char *input) {
+    while (*input) {
+        if (*input < '0' || *input > '9') return false;
+        input++;
+    }
 
-    if (*endPointer == '\0') return number;
+    return true;
+}
+
+int numberStrToInt(const char *input) {
+    int number = 0;
+
+    while (*input) {
+        number = number * 10 + (*input - '0');
+        input++;
+    }
+
+    return number;
 }
 
 // void deskripsiUrutan(int kolom, int arah)
