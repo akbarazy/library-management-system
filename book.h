@@ -21,12 +21,12 @@ typedef struct Node
 
 typedef struct
 {
-    bool completed;
     char notification[256];
+    bool exitMenu;
 } Output;
 
 
-Output addBooks(Node **firstNode);
+Output addBooks(Node **firstNode, Book *tempInput);
 Output showBooks(Node *firstNode);
 Output updateBooks(Node **firstNode);
 Output deleteBooks(Node **firstNode);

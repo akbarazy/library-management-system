@@ -36,6 +36,7 @@ void menuDisplay(int bookCount) {
 
 int main() {
     Output output;
+    Book tempInput;
     Node *firstNode = NULL;
     Menu selectedMenu = DEFAULT;
     char input, notification[256];
@@ -50,7 +51,7 @@ int main() {
         system("cls");
 
         printf("\n");
-        menuDisplay(countBooks(firstNode));
+        menuDisplay(bookCount(firstNode));
 
         if (notification[0] != '\0') {
             printf("Notification:\n%s\n\n", notification);
@@ -62,16 +63,16 @@ int main() {
             printf("Select Menu: ");
 
             input = getch();
-            deleteLines(2);
+            deleteLine(2);
         }
 
         switch (input - '0') {
             case ADD:
                 if (selectedMenu == ADD) {
-                    output = addBooks(&firstNode);
+                    output = addBooks(&firstNode, &tempInput);
 
                     snprintf(notification, sizeof(notification), "%s", output.notification);
-                    if (output.completed) selectedMenu = DEFAULT;
+                    if (output.exitMenu) selectedMenu = DEFAULT;
                 } else {
                     selectedMenu = ADD;
                 }
