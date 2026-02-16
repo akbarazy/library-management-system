@@ -56,7 +56,8 @@ bool verifyInputStr(char *input) {
 
     while (input[index] != '\0') {
         if ((unsigned char)input[index] < 32 || 
-            (unsigned char)input[index] > 126)
+            (unsigned char)input[index] > 126 ||
+            input[index] == '\\')
             return false;
         index++;
     }
@@ -64,7 +65,7 @@ bool verifyInputStr(char *input) {
     return index > 0;
 }
 
-void deleteLines(int lineCount)
+void deleteLine(int lineCount)
 {
     for (int i = 0; i < lineCount; i++)
         printf("\033[A\033[2K");
@@ -126,6 +127,25 @@ int numberStrToInt(const char *input) {
     return number;
 }
 
+bool compareString(const char *input, const char *string) {
+    while (*input && *string) {
+        if (charToLower(*input) != charToLower(*string)) 
+            return false;
+            
+        input++; 
+        string++;
+    }
+
+    return *input == '\0' && *string == '\0';
+}
+
+char charToLower(char character) {
+    if (character >= 'A' && character <= 'Z') {
+        return character - 'A' + 'a';
+    }
+    return character;
+}
+
 // void deskripsiUrutan(int kolom, int arah)
 // {
 //     switch (kolom)
@@ -169,21 +189,6 @@ int numberStrToInt(const char *input) {
 //     case 4:
 //         return arah % 2 ? 
 //             barang.harga > pivot.harga : barang.harga < pivot.harga;
-//     }
-// }
-
-// void hurufKecil(char *stringAsli, char *stringSalinan)
-// {
-//     stringSalinan[0] = '\0';
-
-//     for (int i = 0; i < 255; i++)
-//     {
-//         if (stringAsli[i] == '\0')
-//         {
-//             stringSalinan[i] = '\0';
-//             break;
-//         }
-//         stringSalinan[i] = tolower(stringAsli[i]);
 //     }
 // }
 

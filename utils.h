@@ -9,11 +9,13 @@ Node *createNode();
 void insertNode(Node **firstNode, Node *node);
 bool verifyInputInt(char *input, int min, int max);
 bool verifyInputStr(char *input);
-void deleteLines(int lineCount);
+void deleteLine(int lineCount);
 void trimWhiteSpace(char *input);
 int bookCount(Node *firstNode);
 bool isNumberStr(const char *input);
 int numberStrToInt(const char *input);
+bool compareString(const char *input, const char *string);
+char charToLower(char character);
 
 // void deskripsiUrutan(int kolom, int arah);
 // int kondisiUrutan(Barang barang, Barang pivot, int kolom, int arah);
