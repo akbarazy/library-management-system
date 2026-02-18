@@ -5,8 +5,7 @@
 #include "book.h"
 #include "utils.h"
 
-Node *createNode()
-{
+Node *createNode() {
     Node *node = (Node*) malloc(sizeof(Node));
     if (!node) return NULL;
 
@@ -16,8 +15,7 @@ Node *createNode()
     return node;
 }
 
-void insertNode(Node **firstNode, Node *node)
-{
+void insertNode(Node **firstNode, Node *node) {
     Node *currentNode;
 
     if (!*firstNode) {
@@ -33,8 +31,7 @@ void insertNode(Node **firstNode, Node *node)
     node->prev = currentNode;
 }
 
-bool verifyInputInt(char *input, int min, int max)
-{
+bool verifyInputInt(char *input, int min, int max) {
     int number;
 
     if (!input || input[0] == '\0') return false;
@@ -65,8 +62,7 @@ bool verifyInputStr(char *input) {
     return index > 0;
 }
 
-void deleteLine(int lineCount)
-{
+void deleteLine(int lineCount) {
     for (int i = 0; i < lineCount; i++)
         printf("\033[A\033[2K");
 }
@@ -94,8 +90,7 @@ void trimWhiteSpace(char *input) {
     }
 }
 
-int bookCount(Node *firstNode)
-{
+int bookCount(Node *firstNode) {
     int count = 0;
     Node *currentNode = firstNode;
 

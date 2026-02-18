@@ -26,7 +26,7 @@ typedef struct
 } Output;
 
 
-Output addBooks(Node **firstNode, Book *tempInput);
+Output addBooks(Node **firstNode);
 Output showBooks(Node *firstNode);
 Output updateBooks(Node **firstNode);
 Output deleteBooks(Node **firstNode);

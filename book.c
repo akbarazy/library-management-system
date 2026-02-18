@@ -4,14 +4,15 @@
 #include "book.h"
 #include "utils.h"
 
-Output addBooks(Node **firstNode, Book *tempInput) {
+Output addBooks(Node **firstNode) {
     Node *node;
     Output output;
+    static Book book;
     char input[256];
 
     printf("--- ADD BOOKS ---\n");
     printf("Book Id: %d\n", bookCount(*firstNode) + 1);
-    tempInput->id = bookCount(*firstNode) + 1;
+    book->id = bookCount(*firstNode) + 1;
 
     printf("Book Title: ");
 
@@ -30,7 +31,7 @@ Output addBooks(Node **firstNode, Book *tempInput) {
     }
 
     if (verifyInputStr(input)) {
-        snprintf(tempInput->title, sizeof(tempInput->title), "%s", input);
+        snprintf(book->title, sizeof(book->title), "%s", input);
     } else {
         output.exitMenu = false;
         snprintf(output.notification, sizeof(output.notification), "Invalid Title Name");
@@ -54,7 +55,7 @@ Output addBooks(Node **firstNode, Book *tempInput) {
     }
 
     if (verifyInputStr(input)) {
-        snprintf(tempInput->author, sizeof(tempInput->author), "%s", input);
+        snprintf(book->author, sizeof(book->author), "%s", input);
     } else {
         output.exitMenu = false;
         snprintf(output.notification, sizeof(output.notification), "Invalid Author Name");
@@ -78,7 +79,7 @@ Output addBooks(Node **firstNode, Book *tempInput) {
     }
 
     if (verifyInputInt(input, 1000, 9999)) {
-        tempInput->publicationYear = numberStrToInt(input);
+        book->publicationYear = numberStrToInt(input);
     } else {
         output.exitMenu = false;
         snprintf(output.notification, sizeof(output.notification), "Invalid Publication Year");
@@ -103,9 +104,9 @@ Output addBooks(Node **firstNode, Book *tempInput) {
 
     if (verifyInputStr(input))
         if (compareString(input, "true") == 0) {
-            tempInput->available = true;
+            book->available = true;
         } else if (compareString(input, "false") == 0) {
-            tempInput->available = false;
+            book->available = false;
     } else {
         output.exitMenu = false;
         snprintf(output.notification, sizeof(output.notification), "Invalid Availability Status");
@@ -120,10 +121,57 @@ Output addBooks(Node **firstNode, Book *tempInput) {
         return output;
     }
 
-    node->book = *tempInput;
+    node->book = *book;
     insertNode(firstNode, node);
     
     output.exitMenu = false;
     snprintf(output.notification, sizeof(output.notification), "Book Added Successfully");
     return output;
+}
+
+Output showBooks(Node *firstNode) {
+    Output output;
+    char input;
+    static int currentPagination = 1;
+    int minPagination, maxPagination;
+    int totalPagination = (bookCount(firstNode) + 4) / 5;
+    int totalPaginationNumber = (totalPagination < 5) ? totalPagination : 5;
+
+    printf("--- SHOW BOOKS ---\n");
+    if (totalPagination == 0) {
+        output.exitMenu = true;
+        snprintf(output.notification, sizeof(output.notification), "No Books Found");
+        return output;
+    }
+
+    if (totalPagination <= 5) {
+        minPagination = 1;
+        maxPagination = totalPagination;
+    } else {
+        minPagination = currentPagination - 2;
+        maxPagination = currentPagination + 2;
+
+        if (minPagination < 1) {
+            minPagination = 1;
+            maxPagination = 5;
+        }
+
+        if (maxPagination > totalPagination) {
+            maxPagination = totalPagination;
+            minPagination = totalPagination - 4;
+        }
+    }
+
+    if (minPagination > 1) printf("<< ");
+
+    for (int i = minPagination; i <= maxPagination; i++) {
+        if (i == currentPagination)
+            printf("[%d] ", i);
+        else
+            printf("%d ", i);
+    }
+
+    if (maxPagination < totalPagination) printf(">> ");
+    
+    printf("\n");
 }

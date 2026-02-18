@@ -36,7 +36,6 @@ void menuDisplay(int bookCount) {
 
 int main() {
     Output output;
-    Book tempInput;
     Node *firstNode = NULL;
     Menu selectedMenu = DEFAULT;
     char input, notification[256];
@@ -69,7 +68,7 @@ int main() {
         switch (input - '0') {
             case ADD:
                 if (selectedMenu == ADD) {
-                    output = addBooks(&firstNode, &tempInput);
+                    output = addBooks(&firstNode);
 
                     snprintf(notification, sizeof(notification), "%s", output.notification);
                     if (output.exitMenu) selectedMenu = DEFAULT;
@@ -78,9 +77,16 @@ int main() {
                 }
                 break;
 
-            // case SHOW:
-            //     showBooks(firstNode);
-            //     break;
+            case SHOW:
+                if (selectedMenu == SHOW) {
+                    output = showBooks(firstNode);
+
+                    snprintf(notification, sizeof(notification), "%s", output.notification);
+                    if (output.exitMenu) selectedMenu = DEFAULT;
+                } else {
+                    selectedMenu = SHOW;
+                }
+                break;
             // case UPDATE:
             //     updateBook(&firstNode);
             //     break;
