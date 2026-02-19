@@ -84,7 +84,11 @@ int main() {
                     snprintf(notification, sizeof(notification), "%s", output.notification);
                     if (output.exitMenu) selectedMenu = DEFAULT;
                 } else {
-                    selectedMenu = SHOW;
+                    if (bookCount(firstNode) > 0) {
+                        selectedMenu = SHOW;
+                    } else {
+                        snprintf(output.notification, sizeof(output.notification), "No Books Found");
+                    }
                 }
                 break;
             // case UPDATE:
