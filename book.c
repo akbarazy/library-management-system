@@ -135,9 +135,9 @@ Output showBooks(Node *firstNode) {
     Output output;
     Node *currentNode;
     char input;
-    int startIndex, endIndex;
     static int currentPagination = 1;
     int minPagination, maxPagination;
+    int startIndex, endIndex, index = 0;
     int totalPagination = (bookCount(firstNode) + 4) / 5;
 
     printf("--- SHOW BOOKS ---\n");
@@ -162,14 +162,16 @@ Output showBooks(Node *firstNode) {
     currentNode = firstNode;
     startIndex = (currentPagination - 1) * 5;
     endIndex = startIndex + 4;
-    for (size_t i = 0; i < endIndex + 1; i++) {
-        if (i >= startIndex) {
+    while (currentNode) {
+        if (index >= startIndex && index <= endIndex) {
             printf("Id              : %d\n", currentNode->book.id);
             printf("Title           : %s\n", currentNode->book.title);
             printf("Author          : %s\n", currentNode->book.author);
             printf("Publication Year: %d\n", currentNode->book.publicationYear);
-            printf("Availability    : %s\n\n", currentNode->book.available ? "True" : "False");
+            printf("Availability    : %s\n\n",
+                   currentNode->book.available ? "True" : "False");
         }
+        index++;
         currentNode = currentNode->next;
     }
 
