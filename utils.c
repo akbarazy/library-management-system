@@ -143,54 +143,54 @@ char charToLower(char character) {
 
 void printBook(Node *firstNode, int currentPagination) {
     Node *currentNode = firstNode;
-    int startIndex = (currentPagination - 1) * 5;
+    int startIndex = (currentPagination - 1) * 5,
+        endIndex = startIndex + 4,
+        index = 0;
 
-    for (int i = 0; i < startIndex && currentNode != NULL; i++)
+    while (currentNode) {
+        if (index >= startIndex && index <= endIndex) {
+            printf("Id              : %d\n", currentNode->book.id);
+            printf("Title           : %s\n", currentNode->book.title);
+            printf("Author          : %s\n", currentNode->book.author);
+            printf("Publication Year: %d\n", currentNode->book.publicationYear);
+            printf("Availability    : %s\n\n",
+                currentNode->book.available ? "True" : "False");
+        }
+
         currentNode = currentNode->next;
-
-    for (int i = 0; i < 5 && currentNode != NULL; i++) {
-        printf("Id              : %d\n", currentNode->book.id);
-        printf("Title           : %s\n", currentNode->book.title);
-        printf("Author          : %s\n", currentNode->book.author);
-        printf("Publication Year: %d\n", currentNode->book.publicationYear);
-        printf("Availability    : %s\n\n",
-               currentNode->book.available ? "True" : "False");
-
-        currentNode = currentNode->next;
+        index++;
     }
 }
 
-void printPaginationMenu(int currentPagination, int totalPagination) {
-    int minPagination, maxPagination;
-
+void printPagination(int currentPagination, int totalPagination, int *minPagination, int *maxPagination) {
     if (totalPagination <= 5) {
-        minPagination = 1;
-        maxPagination = totalPagination;
+        *minPagination = 1;
+        *maxPagination = totalPagination;
     } else {
-        minPagination = currentPagination - 2;
-        maxPagination = currentPagination + 2;
+        *minPagination = currentPagination - 2;
+        *maxPagination = currentPagination + 2;
 
-        if (minPagination < 1) {
-            minPagination = 1;
-            maxPagination = 5;
+        if (*minPagination < 1) {
+            *minPagination = 1;
+            *maxPagination = 5;
         }
 
-        if (maxPagination > totalPagination) {
-            maxPagination = totalPagination;
-            minPagination = totalPagination - 4;
+        if (*maxPagination > totalPagination) {
+            *maxPagination = totalPagination;
+            *minPagination = totalPagination - 4;
         }
     }
 
-    if (minPagination > 1) printf("<< ");
+    if (*minPagination > 1) printf("<< ");
 
-    for (int i = minPagination; i <= maxPagination; i++) {
+    for (int i = *minPagination; i <= *maxPagination; i++) {
         if (i == currentPagination)
             printf("[%d] ", i);
         else
             printf("%d ", i);
     }
 
-    if (maxPagination < totalPagination) printf(">> ");
+    if (*maxPagination < totalPagination) printf(">> ");
     printf("\n");
 }
 
