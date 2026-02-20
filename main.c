@@ -38,7 +38,7 @@ int main() {
     Output output;
     Node *firstNode = NULL;
     Menu selectedMenu = DEFAULT;
-    char input, notification[256];
+    char input[256], notification[256];
 
     if (loadData(&firstNode)) {
         snprintf(notification, sizeof(notification), "Data Loaded Successfully");
@@ -61,11 +61,18 @@ int main() {
             printf("==============\n");
             printf("Select Menu: ");
 
-            input = getch();
-            deleteLine(2);
+            if (!fgets(input, sizeof(input), stdin)) {
+                output.exitMenu = false;
+                snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+                return output;
+            }
+
+            input[strcspn(input, "\n")] = '\0';
+            if (!verifyInputStr(input))
+                snprintf(input, sizeof(input), "0");
         }
 
-        switch (input - '0') {
+        switch (numberStrToInt(input)) {
             case ADD:
                 if (selectedMenu == ADD) {
                     output = addBooks(&firstNode);
