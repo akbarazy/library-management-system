@@ -144,12 +144,10 @@ void printBook(Node *firstNode, int currentPagination) {
 
     while (currentNode) {
         if (index >= startIndex && index <= endIndex) {
-            printf("Id              : %d\n", currentNode->book.id);
-            printf("Title           : %s\n", currentNode->book.title);
-            printf("Author          : %s\n", currentNode->book.author);
-            printf("Publication Year: %d\n", currentNode->book.year);
-            printf("Availability    : %s\n\n",
-                currentNode->book.available ? "True" : "False");
+            printf("%d. %s\n", currentNode->book.id, currentNode->book.title);
+            printf("Author    : %s\n", currentNode->book.author);
+            printf("Year      : %d\n", currentNode->book.year);
+            printf("Available : %s\n\n", currentNode->book.available ? "True" : "False");
         }
 
         currentNode = currentNode->next;
