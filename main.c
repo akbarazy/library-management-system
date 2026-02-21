@@ -24,7 +24,7 @@ void menuDisplay(int bookCount) {
     printf(" LIBRARY MANAGEMENT SYSTEM \n");
     printf("===========================\n\n");
 
-    printf("Total Of Books: %d\n\n", bookCount);
+    printf("Total Of Books : %d\n\n", bookCount);
     printf("1. Add Books\n");
     printf("2. Show Books\n");
     printf("3. Update Books\n");
@@ -35,10 +35,10 @@ void menuDisplay(int bookCount) {
 }
 
 int main() {
-    Output output;
+    Output output = {0};
     Node *firstNode = NULL;
     Menu selectedMenu = DEFAULT;
-    char input[256], notification[256];
+    char input[256] = "", notification[256] = "";
 
     if (loadData(&firstNode)) {
         snprintf(notification, sizeof(notification), "Data Loaded Successfully");
@@ -53,22 +53,21 @@ int main() {
         menuDisplay(bookCount(firstNode));
 
         if (notification[0] != '\0') {
-            printf("Notification:\n%s\n\n", notification);
-            memset(notification, 0, sizeof(notification));
+            printf("Notification :\n%s\n\n", notification);
+            snprintf(notification, sizeof(notification), "");
         }
 
         if (selectedMenu == DEFAULT) {
-            printf("==============\n");
-            printf("Select Menu: ");
+            printf("==========\n");
+            printf("Select > ");
 
             if (!fgets(input, sizeof(input), stdin)) {
-                output.exitMenu = false;
                 snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
-                return output;
+                continue;
             }
 
             input[strcspn(input, "\n")] = '\0';
-            if (!verifyInputStr(input))
+            if (!verifyInputInt(input, ADD, QUIT))
                 snprintf(input, sizeof(input), "0");
         }
 
@@ -77,7 +76,9 @@ int main() {
                 if (selectedMenu == ADD) {
                     output = addBooks(&firstNode);
 
-                    snprintf(notification, sizeof(notification), "%s", output.notification);
+                    if (output.notification[0] != '\0')
+                        snprintf(notification, sizeof(notification), "%s", output.notification);
+                    
                     if (output.exitMenu) selectedMenu = DEFAULT;
                 } else {
                     selectedMenu = ADD;
@@ -88,7 +89,9 @@ int main() {
                 if (selectedMenu == SHOW) {
                     output = showBooks(firstNode);
 
-                    snprintf(notification, sizeof(notification), "%s", output.notification);
+                    if (output.notification[0] != '\0')
+                        snprintf(notification, sizeof(notification), "%s", output.notification);
+                    
                     if (output.exitMenu) selectedMenu = DEFAULT;
                 } else {
                     if (bookCount(firstNode) > 0) {
