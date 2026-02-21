@@ -62,11 +62,6 @@ bool verifyInputStr(char *input) {
     return index > 0;
 }
 
-void deleteLine(int lineCount) {
-    for (int i = 0; i < lineCount; i++)
-        printf("\033[A\033[2K");
-}
-
 void trimWhiteSpace(char *input) {
     int firstChar = -1, lastChar = -1, index = 0;
 

@@ -9,7 +9,6 @@ Node *createNode();
 void insertNode(Node **firstNode, Node *node);
 bool verifyInputInt(char *input, int min, int max);
 bool verifyInputStr(char *input);
-void deleteLine(int lineCount);
 void trimWhiteSpace(char *input);
 int bookCount(Node *firstNode);
 bool isNumberStr(const char *input);
