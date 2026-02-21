@@ -18,7 +18,7 @@ bool loadData(Node **firstNode) {
         &book.id,
         book.title,
         book.author,
-        &book.publicationYear,
+        &book.year,
         &book.available
     ) == 5)
     {

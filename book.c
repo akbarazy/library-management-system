@@ -16,80 +16,94 @@ Output addBooks(Node **firstNode) {
     printf("Book Id: %d\n", bookCount(*firstNode) + 1);
     book.id = bookCount(*firstNode) + 1;
 
-    printf("Book Title: ");
+    if (!book.title || book.title[0] == '\0') {
+        printf("Book Title: ");
 
-    if (!fgets(input, sizeof(input), stdin)) {
-        output.exitMenu = false;
-        snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
-        return output;
-    }
+        if (!fgets(input, sizeof(input), stdin)) {
+            output.exitMenu = false;
+            snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+            return output;
+        }
 
-    input[strcspn(input, "\n")] = '\0';
+        input[strcspn(input, "\n")] = '\0';
 
-    if (input[0] == '/' && input[1] == '\0') {
-        output.exitMenu = true;
-        snprintf(output.notification, sizeof(output.notification), "Add Book Cancelled");
-        return output;
-    }
+        if (input[0] == '/' && input[1] == '\0') {
+            output.exitMenu = true;
+            snprintf(output.notification, sizeof(output.notification), "Back To Main Menu");
+            return output;
+        }
 
-    if (verifyInputStr(input)) {
-        snprintf(book.title, sizeof(book.title), "%s", input);
+        if (verifyInputStr(input)) {
+            snprintf(book.title, sizeof(book.title), "%s", input);
+            output.exitMenu = false;
+            return output;
+        } else {
+            output.exitMenu = false;
+            snprintf(output.notification, sizeof(output.notification), "Invalid Title Name");
+            return output;
+        }
     } else {
-        output.exitMenu = false;
-        snprintf(output.notification, sizeof(output.notification), "Invalid Title Name");
-        return output;
+        printf("Book Title: %s\n", book.title);
     }
 
-    printf("Book Author: ");
+    if (!book.author) {
+        printf("Book Author: ");
 
-    if (!fgets(input, sizeof(input), stdin)) {
-        output.exitMenu = false;
-        snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
-        return output;
-    }
+        if (!fgets(input, sizeof(input), stdin)) {
+            output.exitMenu = false;
+            snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+            return output;
+        }
 
-    input[strcspn(input, "\n")] = '\0';
+        input[strcspn(input, "\n")] = '\0';
 
-    if (input[0] == '/' && input[1] == '\0') {
-        output.exitMenu = true;
-        snprintf(output.notification, sizeof(output.notification), "Add Book Cancelled");
-        return output;
-    }
+        if (input[0] == '/' && input[1] == '\0') {
+            output.exitMenu = true;
+            snprintf(output.notification, sizeof(output.notification), "Back To Main Menu");
+            return output;
+        }
 
-    if (verifyInputStr(input)) {
-        snprintf(book.author, sizeof(book.author), "%s", input);
+        if (verifyInputStr(input)) {
+            snprintf(book.author, sizeof(book.author), "%s", input);
+        } else {
+            output.exitMenu = false;
+            snprintf(output.notification, sizeof(output.notification), "Invalid Author Name");
+            return output;
+        }
     } else {
-        output.exitMenu = false;
-        snprintf(output.notification, sizeof(output.notification), "Invalid Author Name");
-        return output;
+        printf("Book Author: %s\n", book.author);
     }
 
-    printf("Book Publication Year: ");
+    if (!book.year) {
+        printf("Book Publication Year: ");
     
-    if (!fgets(input, sizeof(input), stdin)) {
-        output.exitMenu = false;
-        snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
-        return output;
-    }
+        if (!fgets(input, sizeof(input), stdin)) {
+            output.exitMenu = false;
+            snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+            return output;
+        }
 
-    input[strcspn(input, "\n")] = '\0';
+        input[strcspn(input, "\n")] = '\0';
 
-    if (input[0] == '/' && input[1] == '\0') {
-        output.exitMenu = true;
-        snprintf(output.notification, sizeof(output.notification), "Add Book Cancelled");
-        return output;
-    }
+        if (input[0] == '/' && input[1] == '\0') {
+            output.exitMenu = true;
+            snprintf(output.notification, sizeof(output.notification), "Back To Main Menu");
+            return output;
+        }
 
-    if (verifyInputInt(input, 1000, 9999)) {
-        book.publicationYear = numberStrToInt(input);
+        if (verifyInputInt(input, 1000, 9999)) {
+            book.year = numberStrToInt(input);
+        } else {
+            output.exitMenu = false;
+            snprintf(output.notification, sizeof(output.notification), "Invalid Publication Year");
+            return output;
+        }
     } else {
-        output.exitMenu = false;
-        snprintf(output.notification, sizeof(output.notification), "Invalid Publication Year");
-        return output;
+        printf("Book Publication Year: %d\n", book.year);
     }
 
     printf("Book Availability: ");
-    
+
     if (!fgets(input, sizeof(input), stdin)) {
         output.exitMenu = false;
         snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
@@ -100,7 +114,7 @@ Output addBooks(Node **firstNode) {
 
     if (input[0] == '/' && input[1] == '\0') {
         output.exitMenu = true;
-        snprintf(output.notification, sizeof(output.notification), "Add Book Cancelled");
+        snprintf(output.notification, sizeof(output.notification), "Back To Main Menu");
         return output;
     }
 
@@ -134,80 +148,39 @@ Output addBooks(Node **firstNode) {
 Output showBooks(Node *firstNode) {
     Output output;
     Node *currentNode;
-    char input;
+    char input[256];
     static int currentPagination = 1;
     int minPagination, maxPagination;
-    int startIndex, endIndex, index = 0;
     int totalPagination = (bookCount(firstNode) + 4) / 5;
 
     printf("--- SHOW BOOKS ---\n");
-    if (totalPagination <= 5) {
-        minPagination = 1;
-        maxPagination = totalPagination;
-    } else {
-        minPagination = currentPagination - 2;
-        maxPagination = currentPagination + 2;
-
-        if (minPagination < 1) {
-            minPagination = 1;
-            maxPagination = 5;
-        }
-
-        if (maxPagination > totalPagination) {
-            maxPagination = totalPagination;
-            minPagination = totalPagination - 4;
-        }
-    }
-
-    currentNode = firstNode;
-    startIndex = (currentPagination - 1) * 5;
-    endIndex = startIndex + 4;
-    while (currentNode) {
-        if (index >= startIndex && index <= endIndex) {
-            printf("Id              : %d\n", currentNode->book.id);
-            printf("Title           : %s\n", currentNode->book.title);
-            printf("Author          : %s\n", currentNode->book.author);
-            printf("Publication Year: %d\n", currentNode->book.publicationYear);
-            printf("Availability    : %s\n\n",
-                   currentNode->book.available ? "True" : "False");
-        }
-        index++;
-        currentNode = currentNode->next;
-    }
-
-    if (minPagination > 1) printf("<< ");
-
-    for (size_t i = minPagination; i <= maxPagination; i++) {
-        if (i == currentPagination) {
-            printf("[%d] ", i);
-        } else {
-            printf("%d ", i);
-        }
-    }
-
-    if (maxPagination < totalPagination) printf(">> ");
-    printf("\n");
+    printBook(firstNode, currentPagination);
+    printPagination(currentPagination, totalPagination, &minPagination, &maxPagination);
 
     printf("Select Pagination: ");
-    input = getch();
-    deleteLine(2);
 
-    if (input == '/') {
+    if (!fgets(input, sizeof(input), stdin)) {
+        output.exitMenu = false;
+        snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+        return output;
+    }
+
+    input[strcspn(input, "\n")] = '\0';
+
+    if (input[0] == '/' && input[1] == '\0') {
         currentPagination = 1;
         output.exitMenu = true;
         snprintf(output.notification, sizeof(output.notification), "Back To Main Menu");
         return output;
     }
 
-    // verifyInputInt hanya menerima string bukan char
-
-    // if (verifyInputInt(input, minPagination, maxPagination) && input - '0' != currentPagination) {
-    //     currentPagination = input - '0';
-    //     output.exitMenu = false;
-    //     return output;
-    // } else {
-    //     output.exitMenu = false;
-    //     snprintf(output.notification, sizeof(output.notification), "Pagination Not Found");
-    //     return output;
-    // }
+    if (verifyInputInt(input, minPagination, maxPagination) && numberStrToInt(input) != currentPagination) {
+        currentPagination = numberStrToInt(input);
+        output.exitMenu = false;
+        return output;
+    } else {
+        output.exitMenu = false;
+        snprintf(output.notification, sizeof(output.notification), "Pagination Not Found");
+        return output;
+    }
 }

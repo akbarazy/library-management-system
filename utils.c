@@ -152,7 +152,7 @@ void printBook(Node *firstNode, int currentPagination) {
             printf("Id              : %d\n", currentNode->book.id);
             printf("Title           : %s\n", currentNode->book.title);
             printf("Author          : %s\n", currentNode->book.author);
-            printf("Publication Year: %d\n", currentNode->book.publicationYear);
+            printf("Publication Year: %d\n", currentNode->book.year);
             printf("Availability    : %s\n\n",
                 currentNode->book.available ? "True" : "False");
         }
