@@ -1,13 +1,15 @@
 #include "algorithm.h"
+#include "book.h"
 
-// int linearSearchInt(int kunciJawaban) {
-//     for (int i = 0; i < jumlahSemuaBarang; i++) {
-//         if (semuaBarang[i].id == kunciJawaban) {
-//             return i;
-//         }
-//     }
-//     return -1;
-// }
+Node *linearSearchInt(Node *firstNode, int integer) {
+    while (firstNode != NULL) {
+        if (firstNode->book.id == integer) {
+            return firstNode;
+        }
+        firstNode = firstNode->next;
+    }
+    return NULL;
+}
 
 // int linearSearchStr(char kunciJawaban[255], int indexJawaban[255])
 // {
