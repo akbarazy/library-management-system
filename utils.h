@@ -7,13 +7,13 @@
 
 Node *createNode();
 void insertNode(Node **firstNode, Node *node);
-bool verifyInputInt(char *input, int min, int max);
-bool verifyInputStr(char *input);
-void trimWhiteSpace(char *input);
+bool verifyInputInt(char *string, int min, int max);
+bool verifyInputStr(char *string);
+void trimWhiteSpace(char *string);
 int bookCount(Node *firstNode);
-bool isNumberStr(const char *input);
-int numberStrToInt(const char *input);
-bool compareString(const char *input, const char *string);
+bool isNumberStr(const char *string);
+int numberStrToInt(const char *string);
+bool compareString(const char *string1, const char *string2);
 char charToLower(char character);
 void printBook(Node *firstNode, int currentPagination);
 void printPagination(int currentPagination, int totalPagination, int *minPagination, int *maxPagination);

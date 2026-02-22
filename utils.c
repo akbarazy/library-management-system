@@ -31,30 +31,30 @@ void insertNode(Node **firstNode, Node *node) {
     node->prev = currentNode;
 }
 
-bool verifyInputInt(char *input, int min, int max) {
+bool verifyInputInt(char *string, int min, int max) {
     int number;
 
-    if (!input || input[0] == '\0') return false;
-    trimWhiteSpace(input);
+    if (!string || string[0] == '\0') return false;
+    trimWhiteSpace(string);
 
-    if (!isNumberStr(input)) return false;
-    number = numberStrToInt(input);
+    if (!isNumberStr(string)) return false;
+    number = numberStrToInt(string);
     
     if (number < min || number > max)
         return false;
     return true;
 }
 
-bool verifyInputStr(char *input) {
+bool verifyInputStr(char *string) {
     int index = 0;
 
-    if (!input || input[0] == '\0') return false;
-    trimWhiteSpace(input);
+    if (!string || string[0] == '\0') return false;
+    trimWhiteSpace(string);
 
-    while (input[index] != '\0') {
-        if ((unsigned char)input[index] < 32 || 
-            (unsigned char)input[index] > 126 ||
-            input[index] == '\\')
+    while (string[index] != '\0') {
+        if ((unsigned char)string[index] < 32 || 
+            (unsigned char)string[index] > 126 ||
+            string[index] == '\\')
             return false;
         index++;
     }
@@ -62,11 +62,11 @@ bool verifyInputStr(char *input) {
     return index > 0;
 }
 
-void trimWhiteSpace(char *input) {
+void trimWhiteSpace(char *string) {
     int firstChar = -1, lastChar = -1, index = 0;
 
-    while (input[index] != '\0') {
-        if (input[index] != ' ' && input[index] != '\t') {
+    while (string[index] != '\0') {
+        if (string[index] != ' ' && string[index] != '\t') {
             if (firstChar != -1) {
                 lastChar = index;
             } else {
@@ -78,10 +78,10 @@ void trimWhiteSpace(char *input) {
     }
 
     if (firstChar == -1 && lastChar == -1) {
-        input[0] = '\0';
+        string[0] = '\0';
     } else {
-        memmove(input, input + firstChar, lastChar - firstChar + 1);
-        input[lastChar - firstChar + 1] = '\0';
+        memmove(string, string + firstChar, lastChar - firstChar + 1);
+        string[lastChar - firstChar + 1] = '\0';
     }
 }
 
@@ -97,36 +97,36 @@ int bookCount(Node *firstNode) {
     return count;
 }
 
-bool isNumberStr(const char *input) {
-    while (*input) {
-        if (*input < '0' || *input > '9') return false;
-        input++;
+bool isNumberStr(const char *string) {
+    while (*string) {
+        if (*string < '0' || *string > '9') return false;
+        string++;
     }
 
     return true;
 }
 
-int numberStrToInt(const char *input) {
+int numberStrToInt(const char *string) {
     int number = 0;
 
-    while (*input) {
-        number = number * 10 + (*input - '0');
-        input++;
+    while (*string) {
+        number = number * 10 + (*string - '0');
+        string++;
     }
 
     return number;
 }
 
-bool compareString(const char *input, const char *string) {
-    while (*input && *string) {
-        if (charToLower(*input) != charToLower(*string)) 
+bool compareString(const char *string1, const char *string2) {
+    while (*string1 && *string2) {
+        if (charToLower(*string1) != charToLower(*string2)) 
             return false;
             
-        input++; 
-        string++;
+        string1++; 
+        string2++;
     }
 
-    return *input == '\0' && *string == '\0';
+    return *string1 == '\0' && *string2 == '\0';
 }
 
 char charToLower(char character) {
