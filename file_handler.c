@@ -20,8 +20,8 @@ bool loadData(Node **firstNode) {
         book.author,
         &book.year,
         &book.available
-    ) == 5)
-    {
+    ) == 5) {
+        
         node = createNode();
         if (!node)
         {
@@ -32,7 +32,9 @@ bool loadData(Node **firstNode) {
         node->book = book;
         insertNode(firstNode, node);
     }
+
     fclose(file);
+    if (!*firstNode) return false;
 
     return true;
 }
