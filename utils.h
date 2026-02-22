@@ -7,6 +7,7 @@
 
 Node *createNode();
 void insertNode(Node **firstNode, Node *node);
+Node *getLastNode(Node *firstNode);
 bool verifyInputInt(char *input, int min, int max);
 bool verifyInputStr(char *input);
 void trimWhiteSpace(char *input);

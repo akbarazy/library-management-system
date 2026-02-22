@@ -31,6 +31,15 @@ void insertNode(Node **firstNode, Node *node) {
     node->prev = currentNode;
 }
 
+Node *getLastNode(Node *firstNode) {
+    if (!firstNode) return NULL;
+
+    while (firstNode->next != NULL) 
+        firstNode = firstNode->next;
+        
+    return firstNode;
+}
+
 bool verifyInputInt(char *input, int min, int max) {
     int number;
 
@@ -186,6 +195,8 @@ void printPagination(int currentPagination, int totalPagination, int *minPaginat
     if (*maxPagination < totalPagination) printf(">> ");
     printf("\n");
 }
+
+
 
 // void deskripsiUrutan(int kolom, int arah)
 // {
