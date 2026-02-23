@@ -79,7 +79,9 @@ int main() {
                     if (output.notification[0] != '\0')
                         snprintf(notification, sizeof(notification), "%s", output.notification);
                     
-                    if (output.exitMenu) selectedMenu = DEFAULT;
+                    if (output.exitMenu) {
+                        selectedMenu = DEFAULT;
+                    }
                 } else {
                     selectedMenu = ADD;
                 }
@@ -97,13 +99,27 @@ int main() {
                     if (bookCount(firstNode) > 0) {
                         selectedMenu = SHOW;
                     } else {
-                        snprintf(output.notification, sizeof(output.notification), "No Books Found");
+                        snprintf(notification, sizeof(notification), "No Books Found");
                     }
                 }
                 break;
-            // case UPDATE:
-            //     updateBook(&firstNode);
-            //     break;
+
+            case UPDATE:
+                if (selectedMenu == UPDATE) {
+                    output = updateBooks(firstNode);
+
+                    if (output.notification[0] != '\0')
+                        snprintf(notification, sizeof(notification), "%s", output.notification);
+                    
+                    if (output.exitMenu) selectedMenu = DEFAULT;
+                } else {
+                    if (bookCount(firstNode) > 0) {
+                        selectedMenu = UPDATE;
+                    } else {
+                        snprintf(notification, sizeof(notification), "No Books Found");
+                    }
+                }
+                break;
             // case DELETE:
             //     deleteBook(&firstNode);
             //     break;
@@ -116,7 +132,6 @@ int main() {
             case QUIT:
                 // saveData(&firstNode);
                 selectedMenu = QUIT;
-                printf("\n");
                 break;
 
             default:

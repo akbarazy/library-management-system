@@ -28,7 +28,7 @@ typedef struct
 
 Output addBooks(Node **firstNode);
 Output showBooks(Node *firstNode);
-Output updateBooks(Node **firstNode);
+Output updateBooks(Node *firstNode);
 Output deleteBooks(Node **firstNode);
 Output searchBooks(Node *firstNode);
 Output sortBooks(Node **firstNode);
