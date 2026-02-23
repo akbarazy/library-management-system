@@ -63,26 +63,23 @@ bool verifyInputStr(char *string) {
 }
 
 void trimWhiteSpace(char *string) {
-    int firstChar = -1, lastChar = -1, index = 0;
+    int read = 0, write = 0;
 
-    while (string[index] != '\0') {
-        if (string[index] != ' ' && string[index] != '\t') {
-            if (firstChar != -1) {
-                lastChar = index;
-            } else {
-                firstChar = index;
-                lastChar = index;
-            }
+    while (string[read] != '\0') {
+        if (
+            string[read] != ' ' && 
+            string[read] != '\t' && 
+            string[read] != '\n' && 
+            string[read] != '\r' && 
+            string[read] != '\f' && 
+            string[read] != '\v'
+        ) {
+            string[write++] = string[read];
         }
-        index++;
+        read++;
     }
 
-    if (firstChar == -1 && lastChar == -1) {
-        string[0] = '\0';
-    } else {
-        memmove(string, string + firstChar, lastChar - firstChar + 1);
-        string[lastChar - firstChar + 1] = '\0';
-    }
+    string[write] = '\0';
 }
 
 int bookCount(Node *firstNode) {
