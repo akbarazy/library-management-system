@@ -64,21 +64,45 @@ bool verifyInputStr(char *string) {
 
 void trimWhiteSpace(char *string) {
     int read = 0, write = 0;
+    int firstChar = -1, lastChar = -1;
 
     while (string[read] != '\0') {
         if (
-            string[read] != ' ' && 
-            string[read] != '\t' && 
-            string[read] != '\n' && 
-            string[read] != '\r' && 
-            string[read] != '\f' && 
+            string[read] != '\t' &&
+            string[read] != '\n' &&
+            string[read] != '\r' &&
+            string[read] != '\f' &&
             string[read] != '\v'
         ) {
             string[write++] = string[read];
         }
         read++;
     }
+    string[write] = '\0';
 
+    for (int i = 0; string[i] != '\0'; i++) {
+        if (string[i] != ' ') {
+            if (firstChar == -1) firstChar = i;
+            lastChar = i;
+        }
+    }
+
+    if (firstChar == -1) {
+        string[0] = '\0';
+        return;
+    }
+
+    memmove(string, string + firstChar, lastChar - firstChar + 1);
+    string[lastChar - firstChar + 1] = '\0';
+
+    read = 0;
+    write = 0;
+    while (string[read] != '\0') {
+        if (!(string[read] == ' ' && read > 0 && string[read - 1] == ' ')) {
+            string[write++] = string[read];
+        }
+        read++;
+    }
     string[write] = '\0';
 }
 
