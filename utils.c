@@ -31,7 +31,23 @@ void insertNode(Node **firstNode, Node *node) {
 }
 
 void deleteNode(Node **firstNode, Node *node) {
+    Node *currentNode = *firstNode;
+    Node *prev = NULL;
 
+    while (currentNode != NULL && currentNode->book.id != node->book.id) {
+        prev = currentNode;
+        currentNode = currentNode->next;
+    }
+
+    if (currentNode == NULL) return;
+
+    if (prev == NULL) {
+        *firstNode = currentNode->next;
+    } else {
+        prev->next = currentNode->next;
+    }
+
+    free(currentNode);
 }
 
 void deleteAllNode(Node **firstNode) {
@@ -45,7 +61,6 @@ void deleteAllNode(Node **firstNode) {
     }
 
     *firstNode = NULL;
-    printf("All books deleted\n");
 }
 
 bool verifyInputInt(char *string, int min, int max) {
