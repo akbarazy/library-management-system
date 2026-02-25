@@ -16,19 +16,36 @@ Node *createNode() {
 }
 
 void insertNode(Node **firstNode, Node *node) {
-    Node *currentNode;
+    Node *currentNode = *firstNode;
 
     if (!*firstNode) {
         *firstNode = node;
         return;
     }
 
-    currentNode = *firstNode;
     while (currentNode->next) 
         currentNode = currentNode->next;
 
     currentNode->next = node;
     node->prev = currentNode;
+}
+
+void deleteNode(Node **firstNode, Node *node) {
+
+}
+
+void deleteAllNode(Node **firstNode) {
+    Node *currentNode = *firstNode;
+    Node *temp;
+
+    while (currentNode != NULL) {
+        temp = currentNode;
+        currentNode = currentNode->next;
+        free(temp);
+    }
+
+    *firstNode = NULL;
+    printf("All books deleted\n");
 }
 
 bool verifyInputInt(char *string, int min, int max) {
