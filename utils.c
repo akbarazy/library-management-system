@@ -30,21 +30,22 @@ void insertNode(Node **firstNode, Node *node) {
     node->prev = currentNode;
 }
 
-void deleteNode(Node **firstNode, Node *node) {
+void deleteNode(Node **firstNode, int id) {
     Node *currentNode = *firstNode;
-    Node *prev = NULL;
 
-    while (currentNode != NULL && currentNode->book.id != node->book.id) {
-        prev = currentNode;
+    while (currentNode != NULL && currentNode->book.id != id)
         currentNode = currentNode->next;
-    }
 
     if (currentNode == NULL) return;
 
-    if (prev == NULL) {
+    if (currentNode->prev == NULL) {
         *firstNode = currentNode->next;
+        if (*firstNode != NULL) (*firstNode)->prev = NULL;
     } else {
-        prev->next = currentNode->next;
+        currentNode->prev->next = currentNode->next;
+
+        if (currentNode->next != NULL)
+            currentNode->next->prev = currentNode->prev;
     }
 
     free(currentNode);
