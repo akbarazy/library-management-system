@@ -7,7 +7,7 @@
 
 Node *createNode();
 void insertNode(Node **firstNode, Node *node);
-void deleteNode(Node **firstNode, Node *node);
+void deleteNode(Node **firstNode, int id);
 void deleteAllNode(Node **firstNode);
 bool verifyInputInt(char *string, int min, int max);
 bool verifyInputStr(char *string);
@@ -17,8 +17,8 @@ bool isNumberStr(const char *string);
 int numberStrToInt(const char *string);
 bool compareString(const char *string1, const char *string2);
 char charToLower(char character);
-void printBook(Node *firstNode, int currentPagination);
-void printPagination(int currentPagination, int totalPagination, int *minPagination, int *maxPagination);
+void printBook(Node *node);
+void printPagination(Node *firstNode, int *minPagination, int *maxPagination, int currentPagination, int totalPagination);
 
 // void deskripsiUrutan(int kolom, int arah);
 // int kondisiUrutan(Barang barang, Barang pivot, int kolom, int arah);

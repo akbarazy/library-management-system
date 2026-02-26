@@ -190,26 +190,27 @@ char charToLower(char character) {
     return character;
 }
 
-void printBook(Node *firstNode, int currentPagination) {
+void printBook(Node *node) {
+    printf("%d. %s\n", node->book.id, node->book.title);
+    printf("Author    : %s\n", node->book.author);
+    printf("Year      : %d\n", node->book.year);
+    printf("Available : %s\n\n", node->book.available ? "True" : "False");
+}
+
+void printPagination(Node *firstNode, int *minPagination, int *maxPagination, int currentPagination, int totalPagination) {
     Node *currentNode = firstNode;
     int startIndex = (currentPagination - 1) * 5,
         endIndex = startIndex + 4,
         index = 0;
 
     while (currentNode) {
-        if (index >= startIndex && index <= endIndex) {
-            printf("%d. %s\n", currentNode->book.id, currentNode->book.title);
-            printf("Author    : %s\n", currentNode->book.author);
-            printf("Year      : %d\n", currentNode->book.year);
-            printf("Available : %s\n\n", currentNode->book.available ? "True" : "False");
-        }
+        if (index >= startIndex && index <= endIndex)
+            printBook(currentNode);
 
         currentNode = currentNode->next;
         index++;
     }
-}
-
-void printPagination(int currentPagination, int totalPagination, int *minPagination, int *maxPagination) {
+    
     if (totalPagination <= 5) {
         *minPagination = 1;
         *maxPagination = totalPagination;
