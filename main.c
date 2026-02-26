@@ -120,9 +120,23 @@ int main() {
                     }
                 }
                 break;
-            // case DELETE:
-            //     deleteBook(&firstNode);
-            //     break;
+
+            case DELETE:
+                if (selectedMenu == DELETE) {
+                    output = deleteBooks(&firstNode);
+
+                    if (output.notification[0] != '\0')
+                        snprintf(notification, sizeof(notification), "%s", output.notification);
+                    
+                    if (output.exitMenu) selectedMenu = DEFAULT;
+                } else {
+                    if (bookCount(firstNode) > 0) {
+                        selectedMenu = DELETE;
+                    } else {
+                        snprintf(notification, sizeof(notification), "No Books Found");
+                    }
+                }
+                break;
             // case SEARCH:
             //     searchBook(firstNode);
             //     break;

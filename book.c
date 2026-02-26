@@ -165,8 +165,7 @@ Output showBooks(Node *firstNode) {
     int totalPagination = (bookCount(firstNode) + 4) / 5;
 
     printf("--- SHOW BOOKS ---\n\n");
-    printBook(firstNode, currentPagination);
-    printPagination(currentPagination, totalPagination, &minPagination, &maxPagination);
+    printPagination(firstNode, &minPagination, &maxPagination, currentPagination, totalPagination);
 
     printf("Select > ");
 
@@ -406,4 +405,114 @@ Output updateBooks(Node *firstNode) {
     output.exitMenu = false;
     snprintf(output.notification, sizeof(output.notification), "Book Updated Successfully");
     return output;
+}
+
+Output deleteBooks(Node **firstNode) {
+    Output output = {0};
+    static Node *node = NULL;
+    char input[256] = "";
+    static int option = 0;
+
+    printf("--- DELETE BOOKS ---\n\n");
+
+    if (option == 0) {
+        printf("1. Delete By Id\n2. Delete All\n");
+        printf("Select > ");
+
+        if (!fgets(input, sizeof(input), stdin)) {
+            output.exitMenu = false;
+            snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+            return output;
+        }
+
+        input[strcspn(input, "\n")] = '\0';
+
+        if (input[0] == '/' && input[1] == '\0') {
+            output.exitMenu = true;
+            snprintf(output.notification, sizeof(output.notification), "Back To Main Menu");
+            return output;
+        }
+
+        if (verifyInputInt(input, 1, 2)) {
+            option = numberStrToInt(input);
+            output.exitMenu = false;
+            return output;
+        } else {
+            input[0] = '\0';
+            output.exitMenu = false;
+            snprintf(output.notification, sizeof(output.notification), "Invalid Delete Option");
+            return output;
+        }
+    }
+
+    switch (option) {
+        case 1:
+            if (node == NULL) {
+                printf("Book Id :\n");
+        
+                if (!fgets(input, sizeof(input), stdin)) {
+                    output.exitMenu = false;
+                    snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+                    return output;
+                }
+
+                input[strcspn(input, "\n")] = '\0';
+
+                if (input[0] == '/' && input[1] == '\0') {
+                    option = 0;
+                    output.exitMenu = false;
+                    return output;
+                }
+
+                if (verifyInputInt(input, 1, bookCount(*firstNode))) {
+                    node = linearSearchInt(*firstNode, numberStrToInt(input));
+                    output.exitMenu = false;
+                    return output;
+                } else {
+                    output.exitMenu = false;
+                    snprintf(output.notification, sizeof(output.notification), "Invalid Id Number");
+                    return output;
+                }
+            } else {
+                printBook(node);
+                printf("1. Delete\n2. Cancel\n");
+                printf("Select > ");
+        
+                if (!fgets(input, sizeof(input), stdin)) {
+                    output.exitMenu = false;
+                    snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+                    return output;
+                }
+
+                input[strcspn(input, "\n")] = '\0';
+
+                if (input[0] == '/' && input[1] == '\0') {
+                    option = 0;
+                    output.exitMenu = false;
+                    return output;
+                }
+
+                if (verifyInputInt(input, 1, bookCount(*firstNode))) {
+                    if (numberStrToInt(input) == 1) {
+                        deleteNode(firstNode, node->book.id);
+                        snprintf(output.notification, sizeof(output.notification), "Book Deleted Successfully");
+                    }
+                    node = NULL;
+                    
+                    output.exitMenu = false;
+                    return output;
+                } else {
+                    output.exitMenu = false;
+                    snprintf(output.notification, sizeof(output.notification), "Invalid Execute Option");
+                    return output;
+                }
+            }
+            break;
+
+        case 2:
+            deleteAllNode(firstNode);
+            output.exitMenu = true;
+            snprintf(output.notification, sizeof(output.notification), "Back To Main Menu");
+            return output;
+    }
 }
