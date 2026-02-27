@@ -27,6 +27,30 @@ Node *linearSearchInt(Node *firstNode, Field field, int integer) {
     return firstNodeTemp;
 }
 
+Node *linearSearchStr(Node *firstNode, Field field, const char *string) {
+    Node *firstNodeTemp = NULL;
+
+    while (firstNode) {
+        if (field == TITLE && compareString(firstNode->book.title, string)) {
+            Node *node = createNode();
+            if (node == NULL) return NULL;
+            
+            node->book = firstNode->book;
+            insertNode(&firstNodeTemp, node);
+        } else if (field == TITLE && compareString(firstNode->book.title, string)) {
+            Node *node = createNode();
+            if (node == NULL) return NULL;
+            
+            node->book = firstNode->book;
+            insertNode(&firstNodeTemp, node);
+        }
+
+        firstNode = firstNode->next;
+    }
+
+    return firstNodeTemp;
+}
+
 // int partition(int indexPertama, int indexTerakhir, int kolom, int arah)
 // {
 //     Barang pivot = semuaBarang[indexTerakhir];
