@@ -1,36 +1,31 @@
+#include <stdio.h>
 #include "algorithm.h"
 #include "book.h"
+#include "utils.h"
 
-Node *linearSearchInt(Node *firstNode, int integer) {
+Node *linearSearchInt(Node *firstNode, Field field, int integer) {
+    Node *firstNodeTemp = NULL;
+
     while (firstNode != NULL) {
-        if (firstNode->book.id == integer) {
-            return firstNode;
+        if (field == ID && firstNode->book.id == integer) {
+            Node *node = createNode();
+            if (node == NULL) return NULL;
+            
+            node->book = firstNode->book;
+            insertNode(&firstNodeTemp, node);
+        } else if (field == YEAR && firstNode->book.year == integer) {
+            Node *node = createNode();
+            if (node == NULL) return NULL;
+            
+            node->book = firstNode->book;
+            insertNode(&firstNodeTemp, node);
         }
+
         firstNode = firstNode->next;
     }
-    return NULL;
+    
+    return firstNodeTemp;
 }
-
-// int linearSearchStr(char kunciJawaban[255], int indexJawaban[255])
-// {
-//     int jumlahJawaban = 0;
-//     char kunciJawabanSalinan[255],
-//         namaBarangSalinan[255];
-
-//     hurufKecil(kunciJawaban, kunciJawabanSalinan);
-
-//     for (int i = 0; i < jumlahSemuaBarang; i++)
-//     {
-//         hurufKecil(semuaBarang[i].nama, namaBarangSalinan);
-
-//         if (strstr(namaBarangSalinan, kunciJawabanSalinan) != NULL)
-//         {
-//             indexJawaban[jumlahJawaban] = i;
-//             jumlahJawaban++;
-//         }
-//     }
-//     return jumlahJawaban;
-// }
 
 // int partition(int indexPertama, int indexTerakhir, int kolom, int arah)
 // {
