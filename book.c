@@ -167,8 +167,6 @@ Output showBooks(Node *firstNode) {
     printf("--- SHOW BOOKS ---\n\n");
     printPagination(firstNode, &minPagination, &maxPagination, currentPagination, totalPagination);
 
-    printf("Select > ");
-
     if (!fgets(input, sizeof(input), stdin)) {
         output.exitMenu = false;
         snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
@@ -215,6 +213,11 @@ Output updateBooks(Node *firstNode) {
         input[strcspn(input, "\n")] = '\0';
 
         if (input[0] == '/' && input[1] == '\0') {
+            if (node != NULL) {
+                free(node);
+                node = NULL;
+            }
+
             book = (Book) {0};
             output.exitMenu = true;
             snprintf(output.notification, sizeof(output.notification), "Back To Main Menu");
@@ -223,9 +226,11 @@ Output updateBooks(Node *firstNode) {
 
         if (verifyInputInt(input, 1, bookCount(firstNode))) {
             book.id = numberStrToInt(input);
-            node = linearSearchInt(firstNode, book.id);
-            book = node->book;
+            node = linearSearchInt(firstNode, ID, book.id);
+            if (node == NULL)
+                snprintf(output.notification, sizeof(output.notification), "Invalid Id Number");
 
+            book = node->book;
             output.exitMenu = false;
             return output;
         } else {
@@ -237,7 +242,7 @@ Output updateBooks(Node *firstNode) {
         printf("Book Id :\n%d\n\n", book.id);
     }
 
-    if (compareString(book.title, node->book.title) && !skip[0]) {
+    if (compareString(book.title, node->book.title, FULL) && !skip[0]) {
         printf("Book Title : %s\n", node->book.title);
 
         if (!fgets(input, sizeof(input), stdin)) {
@@ -274,7 +279,7 @@ Output updateBooks(Node *firstNode) {
         printf("Book Title :\n%s\n\n", book.title);
     }
 
-    if (compareString(book.author, node->book.author) && !skip[1]) {
+    if (compareString(book.author, node->book.author, FULL) && !skip[1]) {
         printf("Book Author : %s\n", node->book.author);
 
         if (!fgets(input, sizeof(input), stdin)) {
@@ -428,6 +433,11 @@ Output deleteBooks(Node **firstNode) {
         input[strcspn(input, "\n")] = '\0';
 
         if (input[0] == '/' && input[1] == '\0') {
+            if (node != NULL) {
+                free(node);
+                node = NULL;
+            }
+
             output.exitMenu = true;
             snprintf(output.notification, sizeof(output.notification), "Back To Main Menu");
             return output;
@@ -465,7 +475,10 @@ Output deleteBooks(Node **firstNode) {
                 }
 
                 if (verifyInputInt(input, 1, bookCount(*firstNode))) {
-                    node = linearSearchInt(*firstNode, numberStrToInt(input));
+                    node = linearSearchInt(*firstNode, ID, numberStrToInt(input));
+                    if (node == NULL)
+                        snprintf(output.notification, sizeof(output.notification), "Invalid Id Number");
+
                     output.exitMenu = false;
                     return output;
                 } else {
@@ -514,5 +527,281 @@ Output deleteBooks(Node **firstNode) {
             output.exitMenu = true;
             snprintf(output.notification, sizeof(output.notification), "Back To Main Menu");
             return output;
+    }
+}
+
+Output searchBooks(Node *firstNode) {
+    Output output = {0};
+    static Node *node = NULL;
+    char input[256] = "";
+    static int option = 0;
+    static int currentPagination = 1;
+    int minPagination = 0, maxPagination = 0, totalPagination;
+
+    printf("--- DELETE BOOKS ---\n\n");
+
+    if (option == 0) {
+        printf("1. Search By Id\n");
+        printf("2. Search By Title\n");
+        printf("3. Search By Author\n");
+        printf("4. Search By Year\n");
+        printf("5. Search By Available\n");
+        printf("Select > ");
+
+        if (!fgets(input, sizeof(input), stdin)) {
+            output.exitMenu = false;
+            snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+            return output;
+        }
+
+        input[strcspn(input, "\n")] = '\0';
+
+        if (input[0] == '/' && input[1] == '\0') {
+            if (node != NULL) deleteAllNode(&node);
+
+            output.exitMenu = true;
+            snprintf(output.notification, sizeof(output.notification), "Back To Main Menu");
+            return output;
+        }
+
+        if (verifyInputInt(input, 1, 2)) {
+            option = numberStrToInt(input);
+            output.exitMenu = false;
+            return output;
+        } else {
+            input[0] = '\0';
+            output.exitMenu = false;
+            snprintf(output.notification, sizeof(output.notification), "Invalid Delete Option");
+            return output;
+        }
+    }
+
+    if (node == NULL) {
+        switch (option) {
+            case 1:
+                printf("Book Id :\n");
+        
+                if (!fgets(input, sizeof(input), stdin)) {
+                    output.exitMenu = false;
+                    snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+                    return output;
+                }
+
+                input[strcspn(input, "\n")] = '\0';
+
+                if (input[0] == '/' && input[1] == '\0') {
+                    option = 0;
+                    output.exitMenu = false;
+                    return output;
+                }
+
+                if (verifyInputInt(input, 1, bookCount(firstNode))) {
+                    node = linearSearchInt(firstNode, ID, numberStrToInt(input));
+                    if (node == NULL)
+                        snprintf(output.notification, sizeof(output.notification), "Invalid Id Number");
+
+                    output.exitMenu = false;
+                    return output;
+                } else {
+                    output.exitMenu = false;
+                    snprintf(output.notification, sizeof(output.notification), "Invalid Id Number");
+                    return output;
+                }
+                break;
+
+            case 2:
+                printf("Book Title :\n");
+        
+                if (!fgets(input, sizeof(input), stdin)) {
+                    output.exitMenu = false;
+                    snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+                    return output;
+                }
+
+                input[strcspn(input, "\n")] = '\0';
+
+                if (input[0] == '/' && input[1] == '\0') {
+                    option = 0;
+                    output.exitMenu = false;
+                    return output;
+                }
+
+                if (verifyInputStr(input)) {
+                    node = linearSearchStr(firstNode, TITLE, input);
+                    if (node == NULL)
+                        snprintf(output.notification, sizeof(output.notification), "Invalid Title Name");
+
+                    output.exitMenu = false;
+                    return output;
+                } else {
+                    output.exitMenu = false;
+                    snprintf(output.notification, sizeof(output.notification), "Invalid Title Name");
+                    return output;
+                }
+                break;
+
+            case 3:
+                printf("Book Author :\n");
+        
+                if (!fgets(input, sizeof(input), stdin)) {
+                    output.exitMenu = false;
+                    snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+                    return output;
+                }
+
+                input[strcspn(input, "\n")] = '\0';
+
+                if (input[0] == '/' && input[1] == '\0') {
+                    option = 0;
+                    output.exitMenu = false;
+                    return output;
+                }
+
+                if (verifyInputStr(input)) {
+                    node = linearSearchStr(firstNode, AUTHOR, input);
+                    if (node == NULL)
+                        snprintf(output.notification, sizeof(output.notification), "Invalid Author Name");
+
+                    output.exitMenu = false;
+                    return output;
+                } else {
+                    output.exitMenu = false;
+                    snprintf(output.notification, sizeof(output.notification), "Invalid Author Name");
+                    return output;
+                }
+                break;
+
+            case 4:
+                printf("Book Year :\n");
+        
+                if (!fgets(input, sizeof(input), stdin)) {
+                    output.exitMenu = false;
+                    snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+                    return output;
+                }
+
+                input[strcspn(input, "\n")] = '\0';
+
+                if (input[0] == '/' && input[1] == '\0') {
+                    option = 0;
+                    output.exitMenu = false;
+                    return output;
+                }
+
+                if (verifyInputInt(input, 1000, 9999)) {
+                    node = linearSearchInt(firstNode, YEAR, numberStrToInt(input));
+                    if (node == NULL)
+                        snprintf(output.notification, sizeof(output.notification), "Invalid Publication Year");
+
+                    output.exitMenu = false;
+                    return output;
+                } else {
+                    output.exitMenu = false;
+                    snprintf(output.notification, sizeof(output.notification), "Invalid Publication Year");
+                    return output;
+                }
+                break;
+
+            case 5:
+                printf("Book Available :\n");
+                printf("1. True\n2. False\n");
+                printf("Select > ");
+        
+                if (!fgets(input, sizeof(input), stdin)) {
+                    output.exitMenu = false;
+                    snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+                    return output;
+                }
+
+                input[strcspn(input, "\n")] = '\0';
+
+                if (input[0] == '/' && input[1] == '\0') {
+                    option = 0;
+                    output.exitMenu = false;
+                    return output;
+                }
+
+                if (verifyInputInt(input, 1, 2)) {
+                    if (numberStrToInt(input) == 1) {
+                        node = linearSearchInt(firstNode, AVAILABLE, true);
+                    } else if (numberStrToInt(input) == 2) {
+                        node = linearSearchInt(firstNode, AVAILABLE, false);
+                    }
+                    
+                    if (node == NULL)
+                        snprintf(output.notification, sizeof(output.notification), "Invalid Publication Year");
+
+                    output.exitMenu = false;
+                    return output;
+                } else {
+                    output.exitMenu = false;
+                    snprintf(output.notification, sizeof(output.notification), "Invalid Publication Year");
+                    return output;
+                }
+                break;
+        }
+    } else {
+        if (option == 1) {
+            printBook(node);
+            printf("Book Id :\n");
+        
+            if (!fgets(input, sizeof(input), stdin)) {
+                output.exitMenu = false;
+                snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+                return output;
+            }
+
+            input[strcspn(input, "\n")] = '\0';
+
+            if (input[0] == '/' && input[1] == '\0') {
+                deleteAllNode(&node);
+                option = 0;
+                
+                output.exitMenu = false;
+                return output;
+            }
+
+            if (verifyInputInt(input, 1, bookCount(firstNode))) {
+                node = linearSearchInt(firstNode, ID, numberStrToInt(input));
+                if (node == NULL)
+                    snprintf(output.notification, sizeof(output.notification), "Invalid Id Number");
+
+                output.exitMenu = false;
+                return output;
+            } else {
+                output.exitMenu = false;
+                snprintf(output.notification, sizeof(output.notification), "Invalid Id Number");
+                return output;
+            }
+        } else {
+            totalPagination = (bookCount(node) + 4) / 5;
+            printPagination(node, &minPagination, &maxPagination, currentPagination, totalPagination);
+
+            if (!fgets(input, sizeof(input), stdin)) {
+                output.exitMenu = false;
+                snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+                return output;
+            }
+
+            input[strcspn(input, "\n")] = '\0';
+
+            if (input[0] == '/' && input[1] == '\0') {
+                deleteAllNode(&node);
+                currentPagination = 1;
+
+                output.exitMenu = false;
+                return output;
+            }
+
+            if (verifyInputInt(input, minPagination, maxPagination)) {
+                currentPagination = numberStrToInt(input);
+                output.exitMenu = false;
+                return output;
+            } else {
+                output.exitMenu = false;
+                snprintf(output.notification, sizeof(output.notification), "Pagination Not Found");
+                return output;
+            }
+        }
     }
 }

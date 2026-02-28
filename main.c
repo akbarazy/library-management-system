@@ -137,12 +137,24 @@ int main() {
                     }
                 }
                 break;
-            // case SEARCH:
-            //     searchBook(firstNode);
-            //     break;
-            // case SORT:
-            //     sortBooks(&firstNode);
-            //     break;
+
+            case SEARCH:
+                if (selectedMenu == SEARCH) {
+                    output = searchBooks(firstNode);
+
+                    if (output.notification[0] != '\0')
+                        snprintf(notification, sizeof(notification), "%s", output.notification);
+                    
+                    if (output.exitMenu) selectedMenu = DEFAULT;
+                } else {
+                    if (bookCount(firstNode) > 0) {
+                        selectedMenu = SEARCH;
+                    } else {
+                        snprintf(notification, sizeof(notification), "No Books Found");
+                    }
+                }
+                break;
+
             case QUIT:
                 // saveData(&firstNode);
                 selectedMenu = QUIT;
