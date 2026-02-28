@@ -9,13 +9,19 @@ Node *linearSearchInt(Node *firstNode, Field field, int integer) {
     while (firstNode != NULL) {
         if (field == ID && firstNode->book.id == integer) {
             Node *node = createNode();
-            if (node == NULL) return NULL;
+            if (node == NULL) {
+                deleteAllNode(&firstNodeTemp);
+                return NULL;
+            }
             
             node->book = firstNode->book;
             insertNode(&firstNodeTemp, node);
         } else if (field == YEAR && firstNode->book.year == integer) {
             Node *node = createNode();
-            if (node == NULL) return NULL;
+            if (node == NULL) {
+                deleteAllNode(&firstNodeTemp);
+                return NULL;
+            }
             
             node->book = firstNode->book;
             insertNode(&firstNodeTemp, node);
@@ -33,13 +39,19 @@ Node *linearSearchStr(Node *firstNode, Field field, const char *string) {
     while (firstNode) {
         if (field == TITLE && compareString(firstNode->book.title, string)) {
             Node *node = createNode();
-            if (node == NULL) return NULL;
+            if (node == NULL) {
+                deleteAllNode(&firstNodeTemp);
+                return NULL;
+            }
             
             node->book = firstNode->book;
             insertNode(&firstNodeTemp, node);
-        } else if (field == TITLE && compareString(firstNode->book.title, string)) {
+        } else if (field == AUTHOR && compareString(firstNode->book.author, string)) {
             Node *node = createNode();
-            if (node == NULL) return NULL;
+            if (node == NULL) {
+                deleteAllNode(&firstNodeTemp);
+                return NULL;
+            }
             
             node->book = firstNode->book;
             insertNode(&firstNodeTemp, node);
@@ -48,6 +60,27 @@ Node *linearSearchStr(Node *firstNode, Field field, const char *string) {
         firstNode = firstNode->next;
     }
 
+    return firstNodeTemp;
+}
+
+Node *linearSearchBool(Node *firstNode, Field field, bool boolean) {
+    Node *firstNodeTemp = NULL;
+
+    while (firstNode != NULL) {
+        if (field == AVAILABLE && firstNode->book.available == boolean) {
+            Node *node = createNode();
+            if (node == NULL) {
+                deleteAllNode(&firstNodeTemp);
+                return NULL;
+            }
+            
+            node->book = firstNode->book;
+            insertNode(&firstNodeTemp, node);
+        }
+
+        firstNode = firstNode->next;
+    }
+    
     return firstNodeTemp;
 }
 
