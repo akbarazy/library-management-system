@@ -9,10 +9,7 @@ Node *linearSearchInt(Node *firstNode, Field field, int integer) {
     while (firstNode != NULL) {
         if (field == ID && firstNode->book.id == integer) {
             Node *node = createNode();
-            if (node == NULL) {
-                deleteAllNode(&firstNodeTemp);
-                return NULL;
-            }
+            if (node == NULL) return NULL;
             
             node->book = firstNode->book;
             insertNode(&firstNodeTemp, node);
@@ -84,37 +81,51 @@ Node *linearSearchBool(Node *firstNode, Field field, bool boolean) {
     return firstNodeTemp;
 }
 
-// int partition(int indexPertama, int indexTerakhir, int kolom, int arah)
-// {
-//     Barang pivot = semuaBarang[indexTerakhir];
-//     int indexTukar = indexPertama - 1;
+void splitList(Node *source, Node **frontNode, Node **backNode) {
+    Node* slow = source;
+    Node* fast = source->next;
 
-//     for (int i = indexPertama; i < indexTerakhir; i++)
-//     {
-//         if (kondisiUrutan(semuaBarang[i], pivot, kolom, arah))
-//         {
-//             indexTukar++;
+    while (fast) {
+        fast = fast->next;
+        if (fast) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+    }
 
-//             Barang cadangan = semuaBarang[indexTukar];
-//             semuaBarang[indexTukar] = semuaBarang[i];
-//             semuaBarang[i] = cadangan;
-//         }
-//     }
+    *frontNode = source;
+    *backNode = slow->next;
+    slow->next = NULL;
+}
 
-//     Barang cadangan = semuaBarang[indexTukar + 1];
-//     semuaBarang[indexTukar + 1] = semuaBarang[indexTerakhir];
-//     semuaBarang[indexTerakhir] = cadangan;
+Node *sortedMerge(Node *a, Node *b) {
+    Node *result = NULL;
 
-//     return indexTukar + 1;
-// }
+    if (!a) return b;
+    if (!b) return a;
 
-// void quickSort(int indexPertama, int indexTerakhir, int kolom, int arah)
-// {
-//     if (indexPertama < indexTerakhir)
-//     {
-//         int indexPivot = partition(indexPertama, indexTerakhir, kolom, arah);
+    if (a->data <= b->data) {
+        result = a;
+        result->next = sortedMerge(a->next, b);
+    } else {
+        result = b;
+        result->next = sortedMerge(a, b->next);
+    }
 
-//         quickSort(indexPertama, indexPivot - 1, kolom, arah);
-//         quickSort(indexPivot + 1, indexTerakhir, kolom, arah);
-//     }
-// }
+    return result;
+}
+
+void mergeSort(Node **firstNode) {
+    Node* firstNodeTemp = *firstNode;
+    if (!firstNodeTemp || !firstNodeTemp->next) return;
+
+    Node* a;
+    Node* b;
+
+    splitList(firstNodeTemp, &a, &b);
+
+    mergeSort(&a);
+    mergeSort(&b);
+
+    *firstNode = sortedMerge(a, b);
+}
