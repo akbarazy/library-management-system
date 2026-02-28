@@ -37,7 +37,7 @@ Node *linearSearchStr(Node *firstNode, Field field, const char *string) {
     Node *firstNodeTemp = NULL;
 
     while (firstNode) {
-        if (field == TITLE && compareString(firstNode->book.title, string)) {
+        if (field == TITLE && compareString(firstNode->book.title, string, PARTIAL)) {
             Node *node = createNode();
             if (node == NULL) {
                 deleteAllNode(&firstNodeTemp);
@@ -46,7 +46,7 @@ Node *linearSearchStr(Node *firstNode, Field field, const char *string) {
             
             node->book = firstNode->book;
             insertNode(&firstNodeTemp, node);
-        } else if (field == AUTHOR && compareString(firstNode->book.author, string)) {
+        } else if (field == AUTHOR && compareString(firstNode->book.author, string, PARTIAL)) {
             Node *node = createNode();
             if (node == NULL) {
                 deleteAllNode(&firstNodeTemp);
