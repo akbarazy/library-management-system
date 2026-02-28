@@ -5,6 +5,11 @@
 #include <stdbool.h>
 #include "book.h"
 
+typedef enum {
+    FULL,
+    PARTIAL
+} String;
+
 Node *createNode();
 void insertNode(Node **firstNode, Node *node);
 void deleteNode(Node **firstNode, int id);
@@ -15,7 +20,7 @@ void trimWhiteSpace(char *string);
 int bookCount(Node *firstNode);
 bool isNumberStr(const char *string);
 int numberStrToInt(const char *string);
-bool compareString(const char *string1, const char *string2);
+bool compareString(const char *string1, const char *string2, String type);
 char charToLower(char character);
 void printBook(Node *node);
 void printPagination(Node *firstNode, int *minPagination, int *maxPagination, int currentPagination, int totalPagination);

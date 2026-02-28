@@ -171,16 +171,28 @@ int numberStrToInt(const char *string) {
     return number;
 }
 
-bool compareString(const char *string1, const char *string2) {
-    while (*string1 && *string2) {
-        if (charToLower(*string1) != charToLower(*string2)) 
-            return false;
-            
-        string1++; 
-        string2++;
-    }
+bool compareString(const char *string1, const char *string2, String type) {
+    if (type == FULL) {
+        while (*string1 && *string2) {
+            if (charToLower(*string1) != charToLower(*string2))
+                return false;
 
-    return *string1 == '\0' && *string2 == '\0';
+            string1++;
+            string2++;
+        }
+        return *string1 == '\0' && *string2 == '\0';
+    } else if (type == PARTIAL) {
+        while (*string2) {
+            if (*string1 == '\0') return false;
+
+            if (charToLower(*string1) != charToLower(*string2))
+                return false;
+
+            string1++;
+            string2++;
+        }
+        return true;
+    }
 }
 
 char charToLower(char character) {
