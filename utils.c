@@ -172,26 +172,31 @@ int numberStrToInt(const char *string) {
 }
 
 bool compareString(const char *string1, const char *string2, String type) {
+    const char *stringCopy1 = string1;
+    const char *stringCopy2 = string2;
+
     if (type == FULL) {
         while (*string1 && *string2) {
-            if (charToLower(*string1) != charToLower(*string2))
+            if (charToLower(*string1++) != charToLower(*string2++))
                 return false;
-
-            string1++;
-            string2++;
         }
+
         return *string1 == '\0' && *string2 == '\0';
     } else if (type == PARTIAL) {
-        while (*string2) {
-            if (*string1 == '\0') return false;
+        while (*string1) {
+            stringCopy1 = string1;
+            stringCopy2 = string2;
 
-            if (charToLower(*string1) != charToLower(*string2))
-                return false;
+            while (*stringCopy2 && *stringCopy1 && charToLower(*stringCopy1) == charToLower(*stringCopy2)) {
+                stringCopy1++;
+                stringCopy2++;
+            }
 
+            if (*stringCopy2 == '\0') return true;
             string1++;
-            string2++;
         }
-        return true;
+
+        return false;
     }
 }
 
@@ -252,6 +257,7 @@ void printPagination(Node *firstNode, int *minPagination, int *maxPagination, in
 
     if (*maxPagination < totalPagination) printf(">> ");
     printf("\n");
+    printf("Select > ");
 }
 
 // void deskripsiUrutan(int kolom, int arah)
