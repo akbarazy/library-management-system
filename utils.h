@@ -25,9 +25,4 @@ char charToLower(char character);
 void printBook(Node *node);
 void printPagination(Node *firstNode, int *minPagination, int *maxPagination, int currentPagination, int totalPagination);
 
-// void deskripsiUrutan(int kolom, int arah);
-// int kondisiUrutan(Barang barang, Barang pivot, int kolom, int arah);
-// void hurufKecil(char *stringAsli, char *stringSalinan);
-// void hapusSpasi(char *stringAsli);
-
 #endif
