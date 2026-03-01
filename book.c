@@ -375,7 +375,7 @@ Output updateBooks(Node *firstNode) {
     if (input[0] == '\0') {
         skip[3] = true;
 
-        memset(skip, 0, sizeof(skip));
+        memset(skip, false, sizeof(skip));
         book = (Book) {0};
         node = NULL;
         
@@ -403,7 +403,7 @@ Output updateBooks(Node *firstNode) {
     }
 
     node->book = book;
-    memset(skip, 0, sizeof(skip));
+    memset(skip, false, sizeof(skip));
     book = (Book) {0};
     node = NULL;
     
@@ -469,7 +469,9 @@ Output deleteBooks(Node **firstNode) {
                 input[strcspn(input, "\n")] = '\0';
 
                 if (input[0] == '/' && input[1] == '\0') {
+                    deleteAllNode(&node);
                     option = 0;
+
                     output.exitMenu = false;
                     return output;
                 }
@@ -505,7 +507,7 @@ Output deleteBooks(Node **firstNode) {
                     return output;
                 }
 
-                if (verifyInputInt(input, 1, bookCount(*firstNode))) {
+                if (verifyInputInt(input, 1, 2)) {
                     if (numberStrToInt(input) == 1) {
                         deleteNode(firstNode, node->book.id);
                         snprintf(output.notification, sizeof(output.notification), "Book Deleted Successfully");
@@ -525,7 +527,7 @@ Output deleteBooks(Node **firstNode) {
         case 2:
             deleteAllNode(firstNode);
             output.exitMenu = true;
-            snprintf(output.notification, sizeof(output.notification), "Back To Main Menu");
+            snprintf(output.notification, sizeof(output.notification), "All Books Deleted Succesfully");
             return output;
     }
 }
@@ -564,14 +566,14 @@ Output searchBooks(Node *firstNode) {
             return output;
         }
 
-        if (verifyInputInt(input, 1, 2)) {
+        if (verifyInputInt(input, 1, 5)) {
             option = numberStrToInt(input);
             output.exitMenu = false;
             return output;
         } else {
             input[0] = '\0';
             output.exitMenu = false;
-            snprintf(output.notification, sizeof(output.notification), "Invalid Delete Option");
+            snprintf(output.notification, sizeof(output.notification), "Invalid Search Option");
             return output;
         }
     }
@@ -756,7 +758,7 @@ Output searchBooks(Node *firstNode) {
             if (input[0] == '/' && input[1] == '\0') {
                 deleteAllNode(&node);
                 option = 0;
-                
+
                 output.exitMenu = false;
                 return output;
             }
@@ -804,4 +806,88 @@ Output searchBooks(Node *firstNode) {
             }
         }
     }
+}
+
+Output sortBooks(Node **firstNode) {
+    Output output = {0};
+    char input[256] = "";
+    static int option[2] = {0, 0};
+
+    printf("--- SORT BOOKS ---\n\n");
+
+    if (option[0] == 0) {
+        printf("1. Sort By Id\n");
+        printf("2. Sort By Title\n");
+        printf("3. Sort By Author\n");
+        printf("4. Sort By Year\n");
+        printf("5. Sort By Available\n");
+        printf("Select > ");
+
+        if (!fgets(input, sizeof(input), stdin)) {
+            output.exitMenu = false;
+            snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+            return output;
+        }
+
+        input[strcspn(input, "\n")] = '\0';
+
+        if (input[0] == '/' && input[1] == '\0') {
+            memset(option, 0, sizeof(option));
+
+            output.exitMenu = true;
+            snprintf(output.notification, sizeof(output.notification), "Back To Main Menu");
+            return output;
+        }
+
+        if (verifyInputInt(input, 1, 5)) {
+            option[0] = numberStrToInt(input);
+            output.exitMenu = false;
+            return output;
+        } else {
+            input[0] = '\0';
+            output.exitMenu = false;
+            snprintf(output.notification, sizeof(output.notification), "Invalid Sort Option");
+            return output;
+        }
+    }
+
+    if (option[0] != 5) {
+        printf("1. Sort By Ascending\n");
+        printf("2. Sort By Descending\n");
+    } else {
+        printf("1. Sort By Available\n");
+        printf("2. Sort By Not Available\n");
+    }
+    printf("Select > ");
+
+    if (!fgets(input, sizeof(input), stdin)) {
+        output.exitMenu = false;
+        snprintf(output.notification, sizeof(output.notification), "Input Error Occured");
+        return output;
+    }
+
+    input[strcspn(input, "\n")] = '\0';
+
+    if (input[0] == '/' && input[1] == '\0') {
+        option[0] = 0;
+
+        output.exitMenu = false;
+        return output;
+    }
+
+    if (verifyInputInt(input, 1, 2)) {
+        option[1] = numberStrToInt(input);
+        mergeSort(firstNode, option[0], option[1]);
+    } else {
+        input[0] = '\0';
+        output.exitMenu = false;
+        snprintf(output.notification, sizeof(output.notification), "Invalid Sort Option");
+        return output;
+    }
+
+    memset(option, 0, sizeof(option));
+
+    output.exitMenu = true;
+    snprintf(output.notification, sizeof(output.notification), "Books Sorted Succesfully");
+    return output;
 }

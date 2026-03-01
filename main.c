@@ -155,6 +155,23 @@ int main() {
                 }
                 break;
 
+            case SORT:
+                if (selectedMenu == SORT) {
+                    output = sortBooks(&firstNode);
+
+                    if (output.notification[0] != '\0')
+                        snprintf(notification, sizeof(notification), "%s", output.notification);
+                    
+                    if (output.exitMenu) selectedMenu = DEFAULT;
+                } else {
+                    if (bookCount(firstNode) > 0) {
+                        selectedMenu = SORT;
+                    } else {
+                        snprintf(notification, sizeof(notification), "No Books Found");
+                    }
+                }
+                break;
+
             case QUIT:
                 // saveData(&firstNode);
                 selectedMenu = QUIT;
