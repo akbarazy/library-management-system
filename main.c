@@ -173,7 +173,7 @@ int main() {
                 break;
 
             case QUIT:
-                // saveData(&firstNode);
+                saveData(&firstNode);
                 selectedMenu = QUIT;
                 break;
 
