@@ -3,6 +3,7 @@
 #include "book.h"
 #include "utils.h"
 #include "file_handler.h"
+#include "algorithm.h"
 
 bool loadData(Node **firstNode) {
     FILE *file = fopen(DATASET, "r");
@@ -41,19 +42,29 @@ bool loadData(Node **firstNode) {
 
 bool saveData(Node **firstNode) {
     FILE *file = fopen(DATASET, "w");
+    Node *node;
 
     if (!file)
         return false;
 
-    // quickSort(0, jumlahSemuaBarang - 1, 1, 2);
+    if (*firstNode && (*firstNode)->next) {
+        mergeSort(firstNode, 1, 1);
+    }
 
-    // for (int i = 0; i < jumlahSemuaBarang; i++)
-        // fprintf(file, "%d,%s,%d,%.2f\n",
-        //         semuaBarang[i].id,
-        //         semuaBarang[i].nama,
-        //         semuaBarang[i].stok,
-        //         semuaBarang[i].harga);
+    node = *firstNode;
+    while (node) {
+        fprintf(file, node->next != NULL ? "%d,%s,%s,%d,%d\n" : "%d,%s,%s,%d,%d",
+                node->book.id,
+                node->book.title,
+                node->book.author,
+                node->book.year,
+                node->book.available);
+
+        node = node->next;
+    }
+
     fclose(file);
+    deleteAllNode(firstNode);
 
     return true;
 }
